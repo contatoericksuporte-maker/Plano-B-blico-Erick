@@ -528,7 +528,7 @@ textarea,input{font-family:inherit;outline:none}
 </div>
 
 <!-- PAGE: PLANO (homepage) -->
-<div class="page active" id="page-plan">
+<div class="page" id="page-plan">
   <div class="sec-hdr">
     <div>
       <div class="sec-title">Plano Completo</div>
@@ -694,36 +694,6 @@ textarea,input{font-family:inherit;outline:none}
   </div>
   <input type="file" id="file-inp" accept=".json" style="display:none">
   <div style="height:20px"></div>
-</div>
-
-<!-- AUTH SCREEN -->
-<div id="auth-screen">
-  <div class="auth-card">
-    <div class="auth-logo">
-      <span class="auth-logo-icon">📖</span>
-      <div class="auth-logo-title">Palavra Viva</div>
-      <div class="auth-logo-sub">Plano Bíblico · 365 Dias</div>
-    </div>
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tab-login" onclick="authTab('login')">Entrar</div>
-      <div class="auth-tab" id="tab-signup" onclick="authTab('signup')">Criar conta</div>
-    </div>
-    <div class="auth-err" id="auth-err"></div>
-    <div class="auth-field">
-      <label>E-mail</label>
-      <input type="email" id="auth-email" placeholder="seu@email.com" autocomplete="email">
-    </div>
-    <div class="auth-field">
-      <label>Senha</label>
-      <input type="password" id="auth-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAuth()">
-    </div>
-    <div class="auth-field" id="auth-pass2-wrap" style="display:none">
-      <label>Confirmar senha</label>
-      <input type="password" id="auth-pass2" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')doAuth()">
-    </div>
-    <button class="auth-btn" id="auth-btn" onclick="doAuth()">Entrar →</button>
-    <div class="auth-divider">Seus dados ficam salvos na nuvem com segurança ☁</div>
-  </div>
 </div>
 
 <!-- BOTTOM NAV -->
@@ -2218,15 +2188,14 @@ function translateAuthError(msg) {
 
 /* ── After successful login ── */
 async function onLoggedIn() {
-  // Load local first (instant), then cloud
   loadState();
   applyTheme();
+  goPage('plan'); // ativa a página antes de renderizar
   renderProgress();
   renderStreak();
-  renderPlan(true);
   scheduleReminder();
   showApp();
-  await loadFromCloud(); // overlay cloud data on top
+  await loadFromCloud();
 }
 
 function showApp() {
@@ -2377,5 +2346,35 @@ initSupabase();
 
 
 </script>
+<!-- AUTH SCREEN — fora do #root, sempre no topo -->
+<div id="auth-screen" style="display:flex">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="auth-logo-icon">📖</span>
+      <div class="auth-logo-title">Palavra Viva</div>
+      <div class="auth-logo-sub">Plano Bíblico · 365 Dias</div>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="authTab('login')">Entrar</div>
+      <div class="auth-tab" id="tab-signup" onclick="authTab('signup')">Criar conta</div>
+    </div>
+    <div class="auth-err" id="auth-err"></div>
+    <div class="auth-field">
+      <label>E-mail</label>
+      <input type="email" id="auth-email" placeholder="seu@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label>Senha</label>
+      <input type="password" id="auth-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAuth()">
+    </div>
+    <div class="auth-field" id="auth-pass2-wrap" style="display:none">
+      <label>Confirmar senha</label>
+      <input type="password" id="auth-pass2" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')doAuth()">
+    </div>
+    <button class="auth-btn" id="auth-btn" onclick="doAuth()">Entrar →</button>
+    <div class="auth-divider">Seus dados ficam salvos na nuvem com segurança ☁</div>
+  </div>
+</div>
+
 </body>
 </html>
