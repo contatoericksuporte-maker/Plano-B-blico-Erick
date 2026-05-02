@@ -505,10 +505,12 @@ textarea,input{font-family:inherit;outline:none}
   <div class="plan-ctrl">
     <input class="plan-search" id="plan-search" type="search" placeholder="🔍 Buscar dia, livro, tema…" oninput="renderPlan()">
     <div class="filter-row">
-      <button class="fbtn active" id="pf-all"     onclick="setPF('all')">Todos</button>
-      <button class="fbtn"        id="pf-pending"  onclick="setPF('pending')">⏳ Pendentes</button>
-      <button class="fbtn"        id="pf-done"     onclick="setPF('done')">✅ Concluídos</button>
-      <button class="fbtn"        id="pf-partial"  onclick="setPF('partial')">◑ Parciais</button>
+      <button class="fbtn active" id="pf-all"      onclick="setPF('all')">Todos</button>
+      <button class="fbtn"        id="pf-at"        onclick="setPF('at')">📜 Antigo Test.</button>
+      <button class="fbtn"        id="pf-nt"        onclick="setPF('nt')">✝ Novo Test.</button>
+      <button class="fbtn"        id="pf-pending"   onclick="setPF('pending')">⏳ Pendentes</button>
+      <button class="fbtn"        id="pf-done"      onclick="setPF('done')">✅ Concluídos</button>
+      <button class="fbtn"        id="pf-partial"   onclick="setPF('partial')">◑ Parciais</button>
     </div>
   </div>
   <div id="plan-content"></div>
@@ -732,77 +734,48 @@ textarea,input{font-family:inherit;outline:none}
 
 /* ════════ PLAN DATA ════════ */
 const PLAN_FULL = [
-  {phase:"PLANO 365",phaseTitle:"Leitura Bíblica 365 Dias",color:"#e8b86d",weeks:[
-    {week:1,title:"Plano 2026-2027",subtitle:"01/05/2026 – 30/04/2027",days:[
+  {phase:"AT",phaseTitle:"Antigo Testamento",color:"#e8b86d",weeks:[
+    {week:1,title:"Maio 2026",subtitle:"01/05/2026 – 31/05/2026",days:[
       {day:1,ref:"Gênesis 1–3",note:"Dia 1 — 01/05/2026"},
       {day:2,ref:"Gênesis 4–6",note:"Dia 2 — 02/05/2026"},
-      {day:3,ref:"João 1–2",note:"Dia 3 — 03/05/2026"},
-      {day:4,ref:"João 3–4",note:"Dia 4 — 04/05/2026"},
-      {day:5,ref:"João 3–4",note:"Dia 5 — 05/05/2026"},
       {day:6,ref:"Gênesis 7–9",note:"Dia 6 — 06/05/2026"},
       {day:7,ref:"Gênesis 10–12",note:"Dia 7 — 07/05/2026"},
       {day:8,ref:"Gênesis 13–16",note:"Dia 8 — 08/05/2026"},
-      {day:9,ref:"João 5–6",note:"Dia 9 — 09/05/2026"},
-      {day:10,ref:"João 7–8",note:"Dia 10 — 10/05/2026"},
       {day:11,ref:"Gênesis 13–16",note:"Dia 11 — 11/05/2026"},
-      {day:12,ref:"João 9–10",note:"Dia 12 — 12/05/2026"},
       {day:13,ref:"Gênesis 17–19",note:"Dia 13 — 13/05/2026"},
-      {day:14,ref:"João 11–12",note:"Dia 14 — 14/05/2026"},
-      {day:15,ref:"João 13–15",note:"Dia 15 — 15/05/2026"},
       {day:16,ref:"Gênesis 20–22",note:"Dia 16 — 16/05/2026"},
       {day:17,ref:"Gênesis 23–24",note:"Dia 17 — 17/05/2026"},
       {day:18,ref:"Gênesis 25–27",note:"Dia 18 — 18/05/2026"},
-      {day:19,ref:"João 16–18",note:"Dia 19 — 19/05/2026"},
-      {day:20,ref:"João 19–21",note:"Dia 20 — 20/05/2026"},
       {day:21,ref:"Gênesis 28–30",note:"Dia 21 — 21/05/2026"},
       {day:22,ref:"Gênesis 31–32",note:"Dia 22 — 22/05/2026"},
-      {day:23,ref:"Marcos 1–2",note:"Dia 23 — 23/05/2026"},
-      {day:24,ref:"Marcos 3–4",note:"Dia 24 — 24/05/2026"},
       {day:25,ref:"Gênesis 33–35",note:"Dia 25 — 25/05/2026"},
       {day:26,ref:"Gênesis 36–37",note:"Dia 26 — 26/05/2026"},
       {day:27,ref:"Gênesis 38–40",note:"Dia 27 — 27/05/2026"},
       {day:28,ref:"Gênesis 41–42",note:"Dia 28 — 28/05/2026"},
-      {day:29,ref:"Marcos 5–6",note:"Dia 29 — 29/05/2026"},
-      {day:30,ref:"Marcos 7–8",note:"Dia 30 — 30/05/2026"},
       {day:31,ref:"Gênesis 43–45",note:"Dia 31 — 31/05/2026"},
-      {day:32,ref:"Marcos 9–10",note:"Dia 32 — 01/06/2026"},
+    ]},
+    {week:2,title:"Junho 2026",subtitle:"02/06/2026 – 27/06/2026",days:[
       {day:33,ref:"Gênesis 46–47",note:"Dia 33 — 02/06/2026"},
       {day:34,ref:"Gênesis 48–50",note:"Dia 34 — 03/06/2026"},
       {day:35,ref:"Êxodo 1–4",note:"Dia 35 — 04/06/2026"},
-      {day:36,ref:"Marcos 11–12",note:"Dia 36 — 05/06/2026"},
-      {day:37,ref:"Marcos 13–14",note:"Dia 37 — 06/06/2026"},
       {day:38,ref:"Êxodo 5–7",note:"Dia 38 — 07/06/2026"},
       {day:39,ref:"Êxodo 8–10",note:"Dia 39 — 08/06/2026"},
-      {day:40,ref:"Marcos 15–16",note:"Dia 40 — 09/06/2026"},
       {day:41,ref:"Êxodo 11–13",note:"Dia 41 — 10/06/2026"},
       {day:42,ref:"Êxodo 14–16",note:"Dia 42 — 11/06/2026"},
-      {day:43,ref:"Lucas 1",note:"Dia 43 — 12/06/2026"},
-      {day:44,ref:"Lucas 2–3",note:"Dia 44 — 13/06/2026"},
-      {day:45,ref:"Lucas 4–5",note:"Dia 45 — 14/06/2026"},
       {day:46,ref:"Êxodo 17–20",note:"Dia 46 — 15/06/2026"},
       {day:47,ref:"Êxodo 21–23",note:"Dia 47 — 16/06/2026"},
-      {day:48,ref:"Lucas 6–7",note:"Dia 48 — 17/06/2026"},
       {day:49,ref:"Êxodo 24–26",note:"Dia 49 — 18/06/2026"},
       {day:50,ref:"Êxodo 27–29",note:"Dia 50 — 19/06/2026"},
-      {day:51,ref:"Lucas 8–9",note:"Dia 51 — 20/06/2026"},
       {day:52,ref:"Êxodo 30–32",note:"Dia 52 — 21/06/2026"},
       {day:53,ref:"Êxodo 33–35",note:"Dia 53 — 22/06/2026"},
-      {day:54,ref:"Lucas 10–11",note:"Dia 54 — 23/06/2026"},
-      {day:55,ref:"Lucas 12–13",note:"Dia 55 — 24/06/2026"},
-      {day:56,ref:"Lucas 14–16",note:"Dia 56 — 25/06/2026"},
       {day:57,ref:"Êxodo 36–39",note:"Dia 57 — 26/06/2026"},
       {day:58,ref:"Êxodo 39–40",note:"Dia 58 — 27/06/2026"},
-      {day:59,ref:"Lucas 17–18",note:"Dia 59 — 28/06/2026"},
-      {day:60,ref:"Lucas 19–20",note:"Dia 60 — 29/06/2026"},
-      {day:61,ref:"Lucas 21–22",note:"Dia 61 — 30/06/2026"},
-      {day:62,ref:"Lucas 23–24",note:"Dia 62 — 01/07/2026"},
+    ]},
+    {week:3,title:"Julho 2026",subtitle:"02/07/2026 – 31/07/2026",days:[
       {day:63,ref:"Levítico 1–4",note:"Dia 63 — 02/07/2026"},
-      {day:64,ref:"Hebreus 1–5",note:"Dia 64 — 03/07/2026"},
       {day:65,ref:"Levítico 5–7",note:"Dia 65 — 04/07/2026"},
-      {day:66,ref:"Hebreus 6–10",note:"Dia 66 — 05/07/2026"},
       {day:67,ref:"Levítico 8–10",note:"Dia 67 — 06/07/2026"},
       {day:68,ref:"Levítico 11–13",note:"Dia 68 — 07/07/2026"},
-      {day:69,ref:"Hebreus 11–13",note:"Dia 69 — 08/07/2026"},
       {day:70,ref:"Levítico 14–15",note:"Dia 70 — 09/07/2026"},
       {day:71,ref:"Levítico 16–18",note:"Dia 71 — 10/07/2026"},
       {day:72,ref:"Salmos 1–7",note:"Dia 72 — 11/07/2026"},
@@ -813,40 +786,29 @@ const PLAN_FULL = [
       {day:77,ref:"Salmos 15–18",note:"Dia 77 — 16/07/2026"},
       {day:78,ref:"Levítico 26–27",note:"Dia 78 — 17/07/2026"},
       {day:79,ref:"Números 1–2",note:"Dia 79 — 18/07/2026"},
-      {day:80,ref:"Mateus 1–2",note:"Dia 80 — 19/07/2026"},
       {day:81,ref:"Números 3–4",note:"Dia 81 — 20/07/2026"},
-      {day:82,ref:"Mateus 3–4",note:"Dia 82 — 21/07/2026"},
       {day:83,ref:"Números 5–7",note:"Dia 83 — 22/07/2026"},
       {day:84,ref:"Números 8–10",note:"Dia 84 — 23/07/2026"},
       {day:85,ref:"Salmos 19–23",note:"Dia 85 — 24/07/2026"},
-      {day:86,ref:"Mateus 5–6",note:"Dia 86 — 25/07/2026"},
       {day:87,ref:"Números 11–13",note:"Dia 87 — 26/07/2026"},
       {day:88,ref:"Números 14–15",note:"Dia 88 — 27/07/2026"},
-      {day:89,ref:"Mateus 7–9",note:"Dia 89 — 28/07/2026"},
-      {day:90,ref:"Mateus 10–11",note:"Dia 90 — 29/07/2026"},
       {day:91,ref:"Números 16–18",note:"Dia 91 — 30/07/2026"},
       {day:92,ref:"Números 19–21",note:"Dia 92 — 31/07/2026"},
-      {day:93,ref:"Mateus 10–11",note:"Dia 93 — 01/08/2026"},
-      {day:94,ref:"Mateus 12–13",note:"Dia 94 — 02/08/2026"},
+    ]},
+    {week:4,title:"Agosto 2026",subtitle:"03/08/2026 – 31/08/2026",days:[
       {day:95,ref:"Salmos 24–29",note:"Dia 95 — 03/08/2026"},
       {day:96,ref:"Números 22–24",note:"Dia 96 — 04/08/2026"},
       {day:97,ref:"Números 25–26",note:"Dia 97 — 05/08/2026"},
-      {day:98,ref:"Mateus 14–15",note:"Dia 98 — 06/08/2026"},
-      {day:99,ref:"Mateus 16–18",note:"Dia 99 — 07/08/2026"},
       {day:100,ref:"Números 27–29",note:"Dia 100 — 08/08/2026"},
       {day:101,ref:"Números 30–32",note:"Dia 101 — 09/08/2026"},
       {day:102,ref:"Números 33–34",note:"Dia 102 — 10/08/2026"},
-      {day:103,ref:"Mateus 19–21",note:"Dia 103 — 11/08/2026"},
       {day:104,ref:"Números 35–36",note:"Dia 104 — 12/08/2026"},
-      {day:105,ref:"Mateus 22–23",note:"Dia 105 — 13/08/2026"},
       {day:106,ref:"Salmos 30–34",note:"Dia 106 — 14/08/2026"},
       {day:107,ref:"Deuteronômio 1–2",note:"Dia 107 — 15/08/2026"},
       {day:108,ref:"Deuteronômio 3–4",note:"Dia 108 — 16/08/2026"},
-      {day:109,ref:"Mateus 24–26",note:"Dia 109 — 17/08/2026"},
       {day:110,ref:"Malaquias 1–4",note:"Dia 110 — 18/08/2026"},
       {day:111,ref:"Deuteronômio 5–7",note:"Dia 111 — 19/08/2026"},
       {day:112,ref:"Deuteronômio 8–11",note:"Dia 112 — 20/08/2026"},
-      {day:113,ref:"Mateus 27–28",note:"Dia 113 — 21/08/2026"},
       {day:114,ref:"Salmos 35–37",note:"Dia 114 — 22/08/2026"},
       {day:115,ref:"Salmos 38–42",note:"Dia 115 — 23/08/2026"},
       {day:116,ref:"Deuteronômio 12–14",note:"Dia 116 — 24/08/2026"},
@@ -857,140 +819,116 @@ const PLAN_FULL = [
       {day:121,ref:"Deuteronômio 27–28",note:"Dia 121 — 29/08/2026"},
       {day:122,ref:"Deuteronômio 29–31",note:"Dia 122 — 30/08/2026"},
       {day:123,ref:"Deuteronômio 32–34",note:"Dia 123 — 31/08/2026"},
-      {day:124,ref:"Atos 1–2",note:"Dia 124 — 01/09/2026"},
+    ]},
+    {week:5,title:"Setembro 2026",subtitle:"02/09/2026 – 29/09/2026",days:[
       {day:125,ref:"Josué 1–4",note:"Dia 125 — 02/09/2026"},
       {day:126,ref:"Salmos 49–53",note:"Dia 126 — 03/09/2026"},
-      {day:127,ref:"Atos 3–5",note:"Dia 127 — 04/09/2026"},
       {day:128,ref:"Josué 5–8",note:"Dia 128 — 05/09/2026"},
-      {day:129,ref:"Atos 6–7",note:"Dia 129 — 06/09/2026"},
       {day:130,ref:"Josué 9–11",note:"Dia 130 — 07/09/2026"},
       {day:131,ref:"Salmos 54–59",note:"Dia 131 — 08/09/2026"},
-      {day:132,ref:"Atos 8–9",note:"Dia 132 — 09/09/2026"},
       {day:133,ref:"Josué 12–14",note:"Dia 133 — 10/09/2026"},
       {day:134,ref:"Josué 15–16",note:"Dia 134 — 11/09/2026"},
-      {day:135,ref:"Atos 10–11",note:"Dia 135 — 12/09/2026"},
       {day:136,ref:"Josué 17–19",note:"Dia 136 — 13/09/2026"},
-      {day:137,ref:"Atos 12–13",note:"Dia 137 — 14/09/2026"},
-      {day:138,ref:"Atos 14–16",note:"Dia 138 — 15/09/2026"},
       {day:139,ref:"Josué 20–22",note:"Dia 139 — 16/09/2026"},
-      {day:140,ref:"Atos 17–19",note:"Dia 140 — 17/09/2026"},
       {day:141,ref:"Salmos 60–66",note:"Dia 141 — 18/09/2026"},
-      {day:142,ref:"Atos 20–21",note:"Dia 142 — 19/09/2026"},
-      {day:143,ref:"Atos 22–24",note:"Dia 143 — 20/09/2026"},
       {day:144,ref:"Josué 23–24",note:"Dia 144 — 21/09/2026"},
-      {day:145,ref:"Atos 25–28",note:"Dia 145 — 22/09/2026"},
       {day:146,ref:"Salmos 67–69",note:"Dia 146 — 23/09/2026"},
       {day:147,ref:"Juízes 1–3",note:"Dia 147 — 24/09/2026"},
-      {day:148,ref:"Romanos 1–3",note:"Dia 148 — 25/09/2026"},
       {day:149,ref:"Juízes 4–6",note:"Dia 149 — 26/09/2026"},
       {day:150,ref:"Juízes 7–9",note:"Dia 150 — 27/09/2026"},
-      {day:151,ref:"Romanos 4–7",note:"Dia 151 — 28/09/2026"},
       {day:152,ref:"Juízes 10–12",note:"Dia 152 — 29/09/2026"},
-      {day:153,ref:"Romanos 8–9",note:"Dia 153 — 30/09/2026"},
+    ]},
+    {week:6,title:"Outubro 2026",subtitle:"01/10/2026 – 31/10/2026",days:[
       {day:154,ref:"Salmos 70–73",note:"Dia 154 — 01/10/2026"},
       {day:155,ref:"Juízes 13–16",note:"Dia 155 — 02/10/2026"},
-      {day:156,ref:"Romanos 10–12",note:"Dia 156 — 03/10/2026"},
       {day:157,ref:"Juízes 17–19",note:"Dia 157 — 04/10/2026"},
-      {day:158,ref:"Romanos 13–16",note:"Dia 158 — 05/10/2026"},
       {day:159,ref:"Juízes 20–21",note:"Dia 159 — 06/10/2026"},
       {day:160,ref:"Salmos 74–78",note:"Dia 160 — 07/10/2026"},
       {day:161,ref:"Rute 1–4",note:"Dia 161 — 08/10/2026"},
-      {day:162,ref:"Gálatas 1–3",note:"Dia 162 — 09/10/2026"},
-      {day:163,ref:"Gálatas 4–6",note:"Dia 163 — 10/10/2026"},
       {day:164,ref:"1 Samuel 1–3",note:"Dia 164 — 11/10/2026"},
-      {day:165,ref:"Efésios 1–4",note:"Dia 165 — 12/10/2026"},
       {day:166,ref:"Salmos 78–83",note:"Dia 166 — 13/10/2026"},
       {day:167,ref:"1 Samuel 4–7",note:"Dia 167 — 14/10/2026"},
-      {day:168,ref:"1 Samuel 8–10",note:"Dia 168 — 15/10/2026"},
-      {day:169,ref:"Efésios 5–6",note:"Dia 169 — 16/10/2026"},
-      {day:170,ref:"1 Samuel 11–14",note:"Dia 170 — 17/10/2026"},
-      {day:171,ref:"1 Samuel 15–17",note:"Dia 171 — 18/10/2026"},
-      {day:172,ref:"Salmos 84–89",note:"Dia 172 — 19/10/2026"},
+      {day:169,ref:"1 Samuel 8–11",note:"Dia 169 — 16/10/2026"},
+      {day:170,ref:"1 Samuel 12–14",note:"Dia 170 — 17/10/2026"},
+      {day:172,ref:"1 Samuel 15–17",note:"Dia 172 — 19/10/2026"},
       {day:173,ref:"1 Samuel 18–20",note:"Dia 173 — 20/10/2026"},
-      {day:174,ref:"1 Samuel 21–24",note:"Dia 174 — 21/10/2026"},
-      {day:175,ref:"1 Samuel 25–27",note:"Dia 175 — 22/10/2026"},
-      {day:176,ref:"Salmos 90–94",note:"Dia 176 — 23/10/2026"},
-      {day:177,ref:"1 Samuel 28–31",note:"Dia 177 — 24/10/2026"},
-      {day:178,ref:"Filipenses 1–4",note:"Dia 178 — 25/10/2026"},
+      {day:174,ref:"1 Samuel 21–23",note:"Dia 174 — 21/10/2026"},
+      {day:175,ref:"Salmos 84–89",note:"Dia 175 — 22/10/2026"},
+      {day:176,ref:"1 Samuel 24–26",note:"Dia 176 — 23/10/2026"},
+      {day:177,ref:"1 Samuel 27–29",note:"Dia 177 — 24/10/2026"},
+      {day:178,ref:"1 Samuel 30–31",note:"Dia 178 — 25/10/2026"},
       {day:179,ref:"2 Samuel 1–3",note:"Dia 179 — 26/10/2026"},
-      {day:180,ref:"2 Samuel 4–7",note:"Dia 180 — 27/10/2026"},
-      {day:181,ref:"Salmos 95–102",note:"Dia 181 — 28/10/2026"},
-      {day:182,ref:"2 Samuel 8–11",note:"Dia 182 — 29/10/2026"},
-      {day:183,ref:"2 Samuel 12–14",note:"Dia 183 — 30/10/2026"},
-      {day:184,ref:"Salmos 103–105",note:"Dia 184 — 31/10/2026"},
-      {day:185,ref:"Salmos 106–107",note:"Dia 185 — 01/11/2026"},
-      {day:186,ref:"2 Samuel 15–17",note:"Dia 186 — 02/11/2026"},
-      {day:187,ref:"Salmos 108–113",note:"Dia 187 — 03/11/2026"},
-      {day:188,ref:"2 Samuel 18–19",note:"Dia 188 — 04/11/2026"},
-      {day:189,ref:"2 Samuel 20–22",note:"Dia 189 — 05/11/2026"},
-      {day:190,ref:"Salmos 114–118",note:"Dia 190 — 06/11/2026"},
-      {day:191,ref:"Salmos 119",note:"Dia 191 — 07/11/2026"},
-      {day:192,ref:"2 Samuel 23–24",note:"Dia 192 — 08/11/2026"},
-      {day:193,ref:"Tiago 1–5",note:"Dia 193 — 09/11/2026"},
-      {day:194,ref:"Salmos 120–130",note:"Dia 194 — 10/11/2026"},
-      {day:195,ref:"Provérbios 1–3",note:"Dia 195 — 11/11/2026"},
-      {day:196,ref:"1 Reis 1–2",note:"Dia 196 — 12/11/2026"},
-      {day:197,ref:"Salmos 131–136",note:"Dia 197 — 13/11/2026"},
-      {day:198,ref:"1 Reis 3–5",note:"Dia 198 — 14/11/2026"},
-      {day:199,ref:"1 Reis 6–7",note:"Dia 199 — 15/11/2026"},
-      {day:200,ref:"1 Reis 8–9",note:"Dia 200 — 16/11/2026"},
-      {day:201,ref:"Salmos 137–143",note:"Dia 201 — 17/11/2026"},
-      {day:202,ref:"Salmos 144–148",note:"Dia 202 — 18/11/2026"},
-      {day:203,ref:"Salmos 149–150",note:"Dia 203 — 19/11/2026"},
-      {day:204,ref:"1 Reis 10–11",note:"Dia 204 — 20/11/2026"},
-      {day:205,ref:"1 Reis 12–14",note:"Dia 205 — 21/11/2026"},
-      {day:206,ref:"1 Reis 15–17",note:"Dia 206 — 22/11/2026"},
-      {day:207,ref:"Provérbios 4–6",note:"Dia 207 — 23/11/2026"},
-      {day:208,ref:"Provérbios 7–9",note:"Dia 208 — 24/11/2026"},
-      {day:209,ref:"Provérbios 10–12",note:"Dia 209 — 25/11/2026"},
-      {day:210,ref:"1 Reis 18–20",note:"Dia 210 — 26/11/2026"},
-      {day:211,ref:"1 Reis 21–22",note:"Dia 211 — 27/11/2026"},
-      {day:212,ref:"Provérbios 13–15",note:"Dia 212 — 28/11/2026"},
-      {day:213,ref:"2 Reis 1–4",note:"Dia 213 — 29/11/2026"},
-      {day:214,ref:"2 Reis 5–7",note:"Dia 214 — 30/11/2026"},
-      {day:215,ref:"2 Reis 8–10",note:"Dia 215 — 01/12/2026"},
-      {day:216,ref:"Provérbios 16–18",note:"Dia 216 — 02/12/2026"},
-      {day:217,ref:"Provérbios 19–21",note:"Dia 217 — 03/12/2026"},
-      {day:218,ref:"Provérbios 22–24",note:"Dia 218 — 04/12/2026"},
-      {day:219,ref:"2 Reis 11–14",note:"Dia 219 — 05/12/2026"},
-      {day:220,ref:"2 Reis 15–17",note:"Dia 220 — 06/12/2026"},
-      {day:221,ref:"2 Reis 18–19",note:"Dia 221 — 07/12/2026"},
-      {day:222,ref:"Provérbios 25–27",note:"Dia 222 — 08/12/2026"},
-      {day:223,ref:"2 Reis 20–23",note:"Dia 223 — 09/12/2026"},
-      {day:224,ref:"Provérbios 28–31",note:"Dia 224 — 10/12/2026"},
-      {day:225,ref:"2 Reis 24–25",note:"Dia 225 — 11/12/2026"},
-      {day:226,ref:"1 Crônicas 1–2",note:"Dia 226 — 12/12/2026"},
-      {day:227,ref:"Eclesiastes 1–4",note:"Dia 227 — 13/12/2026"},
-      {day:228,ref:"1 Crônicas 3–5",note:"Dia 228 — 14/12/2026"},
-      {day:229,ref:"Eclesiastes 5–8",note:"Dia 229 — 15/12/2026"},
-      {day:230,ref:"1 Crônicas 6",note:"Dia 230 — 16/12/2026"},
-      {day:231,ref:"1 Crônicas 7–8",note:"Dia 231 — 17/12/2026"},
-      {day:232,ref:"Eclesiastes 9–12",note:"Dia 232 — 18/12/2026"},
-      {day:233,ref:"1 Crônicas 9–11",note:"Dia 233 — 19/12/2026"},
-      {day:234,ref:"1 Coríntios 1–4",note:"Dia 234 — 20/12/2026"},
-      {day:235,ref:"1 Coríntios 5–7",note:"Dia 235 — 21/12/2026"},
-      {day:236,ref:"1 Crônicas 12–15",note:"Dia 236 — 22/12/2026"},
+      {day:180,ref:"Salmos 90–95",note:"Dia 180 — 27/10/2026"},
+      {day:181,ref:"2 Samuel 4–6",note:"Dia 181 — 28/10/2026"},
+      {day:182,ref:"2 Samuel 7–10",note:"Dia 182 — 29/10/2026"},
+      {day:183,ref:"2 Samuel 11–14",note:"Dia 183 — 30/10/2026"},
+      {day:184,ref:"2 Samuel 15–17",note:"Dia 184 — 31/10/2026"},
+    ]},
+    {week:7,title:"Novembro 2026",subtitle:"01/11/2026 – 30/11/2026",days:[
+      {day:185,ref:"Salmos 96–100",note:"Dia 185 — 01/11/2026"},
+      {day:186,ref:"2 Samuel 18–20",note:"Dia 186 — 02/11/2026"},
+      {day:187,ref:"2 Samuel 21–24",note:"Dia 187 — 03/11/2026"},
+      {day:188,ref:"1 Reis 1–3",note:"Dia 188 — 04/11/2026"},
+      {day:189,ref:"1 Reis 4–7",note:"Dia 189 — 05/11/2026"},
+      {day:190,ref:"Salmos 101–105",note:"Dia 190 — 06/11/2026"},
+      {day:191,ref:"1 Reis 8–9",note:"Dia 191 — 07/11/2026"},
+      {day:192,ref:"1 Reis 10–12",note:"Dia 192 — 08/11/2026"},
+      {day:193,ref:"1 Reis 13–16",note:"Dia 193 — 09/11/2026"},
+      {day:194,ref:"Salmos 106–109",note:"Dia 194 — 10/11/2026"},
+      {day:195,ref:"1 Reis 17–19",note:"Dia 195 — 11/11/2026"},
+      {day:196,ref:"1 Reis 20–22",note:"Dia 196 — 12/11/2026"},
+      {day:197,ref:"2 Reis 1–4",note:"Dia 197 — 13/11/2026"},
+      {day:198,ref:"2 Reis 5–8",note:"Dia 198 — 14/11/2026"},
+      {day:199,ref:"Salmos 110–115",note:"Dia 199 — 15/11/2026"},
+      {day:200,ref:"2 Reis 9–11",note:"Dia 200 — 16/11/2026"},
+      {day:201,ref:"2 Reis 12–15",note:"Dia 201 — 17/11/2026"},
+      {day:202,ref:"2 Reis 16–18",note:"Dia 202 — 18/11/2026"},
+      {day:203,ref:"2 Reis 19–21",note:"Dia 203 — 19/11/2026"},
+      {day:204,ref:"Salmos 116–118",note:"Dia 204 — 20/11/2026"},
+      {day:205,ref:"2 Reis 22–25",note:"Dia 205 — 21/11/2026"},
+      {day:206,ref:"Salmos 119:1–88",note:"Dia 206 — 22/11/2026"},
+      {day:207,ref:"Provérbios 1–4",note:"Dia 207 — 23/11/2026"},
+      {day:208,ref:"Salmos 119:89–176",note:"Dia 208 — 24/11/2026"},
+      {day:209,ref:"Provérbios 5–9",note:"Dia 209 — 25/11/2026"},
+      {day:210,ref:"Provérbios 10–14",note:"Dia 210 — 26/11/2026"},
+      {day:211,ref:"Provérbios 15–19",note:"Dia 211 — 27/11/2026"},
+      {day:212,ref:"Provérbios 20–23",note:"Dia 212 — 28/11/2026"},
+      {day:213,ref:"Provérbios 24–28",note:"Dia 213 — 29/11/2026"},
+      {day:214,ref:"Provérbios 29–31",note:"Dia 214 — 30/11/2026"},
+    ]},
+    {week:8,title:"Dezembro 2026",subtitle:"01/12/2026 – 31/12/2026",days:[
+      {day:215,ref:"Eclesiastes 1–6",note:"Dia 215 — 01/12/2026"},
+      {day:216,ref:"Eclesiastes 7–12",note:"Dia 216 — 02/12/2026"},
+      {day:217,ref:"Salmos 120–128",note:"Dia 217 — 03/12/2026"},
+      {day:218,ref:"Salmos 129–135",note:"Dia 218 — 04/12/2026"},
+      {day:219,ref:"Salmos 136–141",note:"Dia 219 — 05/12/2026"},
+      {day:220,ref:"Salmos 142–150",note:"Dia 220 — 06/12/2026"},
+      {day:221,ref:"1 Crônicas 1–4",note:"Dia 221 — 07/12/2026"},
+      {day:222,ref:"1 Crônicas 5–7",note:"Dia 222 — 08/12/2026"},
+      {day:223,ref:"1 Crônicas 8–11",note:"Dia 223 — 09/12/2026"},
+      {day:224,ref:"1 Crônicas 12–14",note:"Dia 224 — 10/12/2026"},
+      {day:225,ref:"1 Crônicas 15–16",note:"Dia 225 — 11/12/2026"},
+      {day:228,ref:"1 Crônicas 16–18",note:"Dia 228 — 14/12/2026"},
+      {day:229,ref:"1 Crônicas 19–21",note:"Dia 229 — 15/12/2026"},
+      {day:230,ref:"1 Crônicas 22–24",note:"Dia 230 — 16/12/2026"},
+      {day:231,ref:"1 Crônicas 25–27",note:"Dia 231 — 17/12/2026"},
+      {day:233,ref:"1 Crônicas 28–29",note:"Dia 233 — 19/12/2026"},
+      {day:234,ref:"2 Crônicas 1–3",note:"Dia 234 — 20/12/2026"},
+      {day:235,ref:"2 Crônicas 4–7",note:"Dia 235 — 21/12/2026"},
       {day:237,ref:"1 Crônicas 16–18",note:"Dia 237 — 23/12/2026"},
-      {day:238,ref:"1 Coríntios 8–10",note:"Dia 238 — 24/12/2026"},
-      {day:239,ref:"1 Coríntios 11–13",note:"Dia 239 — 25/12/2026"},
       {day:240,ref:"1 Crônicas 19–22",note:"Dia 240 — 26/12/2026"},
       {day:241,ref:"1 Crônicas 23–25",note:"Dia 241 — 27/12/2026"},
       {day:242,ref:"1 Crônicas 26–29",note:"Dia 242 — 28/12/2026"},
-      {day:243,ref:"1 Coríntios 14–16",note:"Dia 243 — 29/12/2026"},
       {day:244,ref:"2 Crônicas 1–4",note:"Dia 244 — 30/12/2026"},
       {day:245,ref:"2 Crônicas 5–7",note:"Dia 245 — 31/12/2026"},
-      {day:246,ref:"2 Coríntios 1–4",note:"Dia 246 — 01/01/2027"},
+    ]},
+    {week:9,title:"Janeiro 2027",subtitle:"02/01/2027 – 30/01/2027",days:[
       {day:247,ref:"2 Crônicas 8–11",note:"Dia 247 — 02/01/2027"},
-      {day:248,ref:"2 Coríntios 5–8",note:"Dia 248 — 03/01/2027"},
-      {day:249,ref:"2 Coríntios 9–13",note:"Dia 249 — 04/01/2027"},
       {day:250,ref:"2 Crônicas 12–15",note:"Dia 250 — 05/01/2027"},
-      {day:251,ref:"1 Pedro 1–3",note:"Dia 251 — 06/01/2027"},
       {day:252,ref:"2 Crônicas 16–19",note:"Dia 252 — 07/01/2027"},
       {day:253,ref:"2 Crônicas 20–23",note:"Dia 253 — 08/01/2027"},
-      {day:254,ref:"1 Pedro 4–5",note:"Dia 254 — 09/01/2027"},
       {day:255,ref:"2 Crônicas 24–26",note:"Dia 255 — 10/01/2027"},
       {day:256,ref:"2 Crônicas 27–29",note:"Dia 256 — 11/01/2027"},
-      {day:257,ref:"2 Pedro 1–3",note:"Dia 257 — 12/01/2027"},
       {day:258,ref:"2 Crônicas 30–32",note:"Dia 258 — 13/01/2027"},
       {day:259,ref:"2 Crônicas 33–36",note:"Dia 259 — 14/01/2027"},
       {day:260,ref:"Esdras 1–2",note:"Dia 260 — 15/01/2027"},
@@ -1003,16 +941,14 @@ const PLAN_FULL = [
       {day:267,ref:"Ester 1–4",note:"Dia 267 — 22/01/2027"},
       {day:268,ref:"Ester 5–10",note:"Dia 268 — 23/01/2027"},
       {day:269,ref:"Jó 1–2",note:"Dia 269 — 24/01/2027"},
-      {day:270,ref:"1 João 1–5",note:"Dia 270 — 25/01/2027"},
       {day:271,ref:"Jó 3–5",note:"Dia 271 — 26/01/2027"},
       {day:272,ref:"Jó 6–8",note:"Dia 272 — 27/01/2027"},
-      {day:273,ref:"2 João 1",note:"Dia 273 — 28/01/2027"},
       {day:274,ref:"Jó 9–11",note:"Dia 274 — 29/01/2027"},
       {day:275,ref:"Jó 12–15",note:"Dia 275 — 30/01/2027"},
-      {day:276,ref:"3 João 1",note:"Dia 276 — 31/01/2027"},
+    ]},
+    {week:10,title:"Fevereiro 2027",subtitle:"01/02/2027 – 28/02/2027",days:[
       {day:277,ref:"Jó 16–20",note:"Dia 277 — 01/02/2027"},
       {day:278,ref:"Jó 21–25",note:"Dia 278 — 02/02/2027"},
-      {day:279,ref:"Judas 1",note:"Dia 279 — 03/02/2027"},
       {day:280,ref:"Jó 26–28",note:"Dia 280 — 04/02/2027"},
       {day:281,ref:"Jó 29–31",note:"Dia 281 — 05/02/2027"},
       {day:282,ref:"Jó 32–34",note:"Dia 282 — 06/02/2027"},
@@ -1035,41 +971,36 @@ const PLAN_FULL = [
       {day:299,ref:"Isaías 33–36",note:"Dia 299 — 23/02/2027"},
       {day:300,ref:"Isaías 37–40",note:"Dia 300 — 24/02/2027"},
       {day:301,ref:"Daniel 10–12",note:"Dia 301 — 25/02/2027"},
-      {day:302,ref:"Apocalipse 1–4",note:"Dia 302 — 26/02/2027"},
       {day:303,ref:"Isaías 41–43",note:"Dia 303 — 27/02/2027"},
       {day:304,ref:"Isaías 44–47",note:"Dia 304 — 28/02/2027"},
+    ]},
+    {week:11,title:"Março 2027",subtitle:"01/03/2027 – 31/03/2027",days:[
       {day:305,ref:"Isaías 48–51",note:"Dia 305 — 01/03/2027"},
       {day:306,ref:"Isaías 52–57",note:"Dia 306 — 02/03/2027"},
       {day:307,ref:"Isaías 58–62",note:"Dia 307 — 03/03/2027"},
-      {day:308,ref:"Apocalipse 5–9",note:"Dia 308 — 04/03/2027"},
       {day:309,ref:"Isaías 63–66",note:"Dia 309 — 05/03/2027"},
-      {day:310,ref:"Apocalipse 10–14",note:"Dia 310 — 06/03/2027"},
       {day:311,ref:"Jeremias 1–3",note:"Dia 311 — 07/03/2027"},
       {day:312,ref:"Jeremias 4–6",note:"Dia 312 — 08/03/2027"},
       {day:313,ref:"Jeremias 7–9",note:"Dia 313 — 09/03/2027"},
-      {day:314,ref:"Apocalipse 15–19",note:"Dia 314 — 10/03/2027"},
       {day:315,ref:"Jeremias 10–13",note:"Dia 315 — 11/03/2027"},
       {day:316,ref:"Jeremias 14–17",note:"Dia 316 — 12/03/2027"},
       {day:317,ref:"Jeremias 18–22",note:"Dia 317 — 13/03/2027"},
-      {day:318,ref:"Apocalipse 20–22",note:"Dia 318 — 14/03/2027"},
       {day:319,ref:"Jeremias 23–25",note:"Dia 319 — 15/03/2027"},
       {day:320,ref:"Jeremias 26–29",note:"Dia 320 — 16/03/2027"},
-      {day:321,ref:"1 Timóteo 1–6",note:"Dia 321 — 17/03/2027"},
       {day:322,ref:"Jeremias 30–32",note:"Dia 322 — 18/03/2027"},
       {day:323,ref:"Jeremias 33–36",note:"Dia 323 — 19/03/2027"},
       {day:324,ref:"Jeremias 37–40",note:"Dia 324 — 20/03/2027"},
-      {day:325,ref:"2 Timóteo 1–4",note:"Dia 325 — 21/03/2027"},
       {day:326,ref:"Jeremias 41–44",note:"Dia 326 — 22/03/2027"},
       {day:327,ref:"Jeremias 45–48",note:"Dia 327 — 23/03/2027"},
       {day:328,ref:"Jeremias 49–50",note:"Dia 328 — 24/03/2027"},
-      {day:329,ref:"Tito 1–3",note:"Dia 329 — 25/03/2027"},
       {day:330,ref:"Jeremias 51–52",note:"Dia 330 — 26/03/2027"},
       {day:331,ref:"Lamentações 1–3",note:"Dia 331 — 27/03/2027"},
       {day:332,ref:"Lamentações 4–5",note:"Dia 332 — 28/03/2027"},
       {day:333,ref:"Ezequiel 1–4",note:"Dia 333 — 29/03/2027"},
       {day:334,ref:"Ezequiel 5–8",note:"Dia 334 — 30/03/2027"},
       {day:335,ref:"Ezequiel 9–12",note:"Dia 335 — 31/03/2027"},
-      {day:336,ref:"Colossenses 1–4",note:"Dia 336 — 01/04/2027"},
+    ]},
+    {week:12,title:"Abril 2027",subtitle:"02/04/2027 – 27/04/2027",days:[
       {day:337,ref:"Ageu 1–2",note:"Dia 337 — 02/04/2027"},
       {day:338,ref:"Habacuque 1–3",note:"Dia 338 — 03/04/2027"},
       {day:339,ref:"Jonas 1–4",note:"Dia 339 — 04/04/2027"},
@@ -1096,6 +1027,123 @@ const PLAN_FULL = [
       {day:360,ref:"Miquéias 1–7",note:"Dia 360 — 25/04/2027"},
       {day:361,ref:"Zacarias 1–6",note:"Dia 361 — 26/04/2027"},
       {day:362,ref:"Zacarias 7–14",note:"Dia 362 — 27/04/2027"},
+    ]},
+  ]},
+  {phase:"NT",phaseTitle:"Novo Testamento",color:"#6b8cff",weeks:[
+    {week:13,title:"Maio 2026",subtitle:"03/05/2026 – 30/05/2026",days:[
+      {day:3,ref:"João 1–2",note:"Dia 3 — 03/05/2026"},
+      {day:4,ref:"João 3–4",note:"Dia 4 — 04/05/2026"},
+      {day:5,ref:"João 3–4",note:"Dia 5 — 05/05/2026"},
+      {day:9,ref:"João 5–6",note:"Dia 9 — 09/05/2026"},
+      {day:10,ref:"João 7–8",note:"Dia 10 — 10/05/2026"},
+      {day:12,ref:"João 9–10",note:"Dia 12 — 12/05/2026"},
+      {day:14,ref:"João 11–12",note:"Dia 14 — 14/05/2026"},
+      {day:15,ref:"João 13–15",note:"Dia 15 — 15/05/2026"},
+      {day:19,ref:"João 16–18",note:"Dia 19 — 19/05/2026"},
+      {day:20,ref:"João 19–21",note:"Dia 20 — 20/05/2026"},
+      {day:23,ref:"Marcos 1–2",note:"Dia 23 — 23/05/2026"},
+      {day:24,ref:"Marcos 3–4",note:"Dia 24 — 24/05/2026"},
+      {day:29,ref:"Marcos 5–6",note:"Dia 29 — 29/05/2026"},
+      {day:30,ref:"Marcos 7–8",note:"Dia 30 — 30/05/2026"},
+    ]},
+    {week:14,title:"Junho 2026",subtitle:"01/06/2026 – 30/06/2026",days:[
+      {day:32,ref:"Marcos 9–10",note:"Dia 32 — 01/06/2026"},
+      {day:36,ref:"Marcos 11–12",note:"Dia 36 — 05/06/2026"},
+      {day:37,ref:"Marcos 13–14",note:"Dia 37 — 06/06/2026"},
+      {day:40,ref:"Marcos 15–16",note:"Dia 40 — 09/06/2026"},
+      {day:43,ref:"Lucas 1",note:"Dia 43 — 12/06/2026"},
+      {day:44,ref:"Lucas 2–3",note:"Dia 44 — 13/06/2026"},
+      {day:45,ref:"Lucas 4–5",note:"Dia 45 — 14/06/2026"},
+      {day:48,ref:"Lucas 6–7",note:"Dia 48 — 17/06/2026"},
+      {day:51,ref:"Lucas 8–9",note:"Dia 51 — 20/06/2026"},
+      {day:54,ref:"Lucas 10–11",note:"Dia 54 — 23/06/2026"},
+      {day:55,ref:"Lucas 12–13",note:"Dia 55 — 24/06/2026"},
+      {day:56,ref:"Lucas 14–16",note:"Dia 56 — 25/06/2026"},
+      {day:59,ref:"Lucas 17–18",note:"Dia 59 — 28/06/2026"},
+      {day:60,ref:"Lucas 19–20",note:"Dia 60 — 29/06/2026"},
+      {day:61,ref:"Lucas 21–22",note:"Dia 61 — 30/06/2026"},
+    ]},
+    {week:15,title:"Julho 2026",subtitle:"01/07/2026 – 29/07/2026",days:[
+      {day:62,ref:"Lucas 23–24",note:"Dia 62 — 01/07/2026"},
+      {day:64,ref:"Hebreus 1–5",note:"Dia 64 — 03/07/2026"},
+      {day:66,ref:"Hebreus 6–10",note:"Dia 66 — 05/07/2026"},
+      {day:69,ref:"Hebreus 11–13",note:"Dia 69 — 08/07/2026"},
+      {day:80,ref:"Mateus 1–2",note:"Dia 80 — 19/07/2026"},
+      {day:82,ref:"Mateus 3–4",note:"Dia 82 — 21/07/2026"},
+      {day:86,ref:"Mateus 5–6",note:"Dia 86 — 25/07/2026"},
+      {day:89,ref:"Mateus 7–9",note:"Dia 89 — 28/07/2026"},
+      {day:90,ref:"Mateus 10–11",note:"Dia 90 — 29/07/2026"},
+    ]},
+    {week:16,title:"Agosto 2026",subtitle:"01/08/2026 – 21/08/2026",days:[
+      {day:93,ref:"Mateus 10–11",note:"Dia 93 — 01/08/2026"},
+      {day:94,ref:"Mateus 12–13",note:"Dia 94 — 02/08/2026"},
+      {day:98,ref:"Mateus 14–15",note:"Dia 98 — 06/08/2026"},
+      {day:99,ref:"Mateus 16–18",note:"Dia 99 — 07/08/2026"},
+      {day:103,ref:"Mateus 19–21",note:"Dia 103 — 11/08/2026"},
+      {day:105,ref:"Mateus 22–23",note:"Dia 105 — 13/08/2026"},
+      {day:109,ref:"Mateus 24–26",note:"Dia 109 — 17/08/2026"},
+      {day:113,ref:"Mateus 27–28",note:"Dia 113 — 21/08/2026"},
+    ]},
+    {week:17,title:"Setembro 2026",subtitle:"01/09/2026 – 30/09/2026",days:[
+      {day:124,ref:"Atos 1–2",note:"Dia 124 — 01/09/2026"},
+      {day:127,ref:"Atos 3–5",note:"Dia 127 — 04/09/2026"},
+      {day:129,ref:"Atos 6–7",note:"Dia 129 — 06/09/2026"},
+      {day:132,ref:"Atos 8–9",note:"Dia 132 — 09/09/2026"},
+      {day:135,ref:"Atos 10–11",note:"Dia 135 — 12/09/2026"},
+      {day:137,ref:"Atos 12–13",note:"Dia 137 — 14/09/2026"},
+      {day:138,ref:"Atos 14–16",note:"Dia 138 — 15/09/2026"},
+      {day:140,ref:"Atos 17–19",note:"Dia 140 — 17/09/2026"},
+      {day:142,ref:"Atos 20–21",note:"Dia 142 — 19/09/2026"},
+      {day:143,ref:"Atos 22–24",note:"Dia 143 — 20/09/2026"},
+      {day:145,ref:"Atos 25–28",note:"Dia 145 — 22/09/2026"},
+      {day:148,ref:"Romanos 1–3",note:"Dia 148 — 25/09/2026"},
+      {day:151,ref:"Romanos 4–7",note:"Dia 151 — 28/09/2026"},
+      {day:153,ref:"Romanos 8–9",note:"Dia 153 — 30/09/2026"},
+    ]},
+    {week:18,title:"Outubro 2026",subtitle:"03/10/2026 – 18/10/2026",days:[
+      {day:156,ref:"Romanos 10–12",note:"Dia 156 — 03/10/2026"},
+      {day:158,ref:"Romanos 13–16",note:"Dia 158 — 05/10/2026"},
+      {day:162,ref:"Gálatas 1–3",note:"Dia 162 — 09/10/2026"},
+      {day:163,ref:"Gálatas 4–6",note:"Dia 163 — 10/10/2026"},
+      {day:165,ref:"Efésios 1–4",note:"Dia 165 — 12/10/2026"},
+      {day:168,ref:"Efésios 5–6",note:"Dia 168 — 15/10/2026"},
+      {day:171,ref:"Filipenses 1–4",note:"Dia 171 — 18/10/2026"},
+    ]},
+    {week:19,title:"Dezembro 2026",subtitle:"12/12/2026 – 29/12/2026",days:[
+      {day:226,ref:"Tiago 1–5",note:"Dia 226 — 12/12/2026"},
+      {day:227,ref:"Filipenses 1–4",note:"Dia 227 — 13/12/2026"},
+      {day:232,ref:"1 Coríntios 1–4",note:"Dia 232 — 18/12/2026"},
+      {day:236,ref:"1 Coríntios 5–7",note:"Dia 236 — 22/12/2026"},
+      {day:238,ref:"1 Coríntios 8–10",note:"Dia 238 — 24/12/2026"},
+      {day:239,ref:"1 Coríntios 11–13",note:"Dia 239 — 25/12/2026"},
+      {day:243,ref:"1 Coríntios 14–16",note:"Dia 243 — 29/12/2026"},
+    ]},
+    {week:20,title:"Janeiro 2027",subtitle:"01/01/2027 – 31/01/2027",days:[
+      {day:246,ref:"2 Coríntios 1–4",note:"Dia 246 — 01/01/2027"},
+      {day:248,ref:"2 Coríntios 5–8",note:"Dia 248 — 03/01/2027"},
+      {day:249,ref:"2 Coríntios 9–13",note:"Dia 249 — 04/01/2027"},
+      {day:251,ref:"1 Pedro 1–3",note:"Dia 251 — 06/01/2027"},
+      {day:254,ref:"1 Pedro 4–5",note:"Dia 254 — 09/01/2027"},
+      {day:257,ref:"2 Pedro 1–3",note:"Dia 257 — 12/01/2027"},
+      {day:270,ref:"1 João 1–5",note:"Dia 270 — 25/01/2027"},
+      {day:273,ref:"2 João 1",note:"Dia 273 — 28/01/2027"},
+      {day:276,ref:"3 João 1",note:"Dia 276 — 31/01/2027"},
+    ]},
+    {week:21,title:"Fevereiro 2027",subtitle:"03/02/2027 – 26/02/2027",days:[
+      {day:279,ref:"Judas 1",note:"Dia 279 — 03/02/2027"},
+      {day:302,ref:"Apocalipse 1–4",note:"Dia 302 — 26/02/2027"},
+    ]},
+    {week:22,title:"Março 2027",subtitle:"04/03/2027 – 25/03/2027",days:[
+      {day:308,ref:"Apocalipse 5–9",note:"Dia 308 — 04/03/2027"},
+      {day:310,ref:"Apocalipse 10–14",note:"Dia 310 — 06/03/2027"},
+      {day:314,ref:"Apocalipse 15–19",note:"Dia 314 — 10/03/2027"},
+      {day:318,ref:"Apocalipse 20–22",note:"Dia 318 — 14/03/2027"},
+      {day:321,ref:"1 Timóteo 1–6",note:"Dia 321 — 17/03/2027"},
+      {day:325,ref:"2 Timóteo 1–4",note:"Dia 325 — 21/03/2027"},
+      {day:329,ref:"Tito 1–3",note:"Dia 329 — 25/03/2027"},
+    ]},
+    {week:23,title:"Abril 2027",subtitle:"01/04/2027 – 30/04/2027",days:[
+      {day:336,ref:"Colossenses 1–4",note:"Dia 336 — 01/04/2027"},
       {day:363,ref:"1 Tessalonicenses 1–5",note:"Dia 363 — 28/04/2027"},
       {day:364,ref:"Filemom 1",note:"Dia 364 — 29/04/2027"},
       {day:365,ref:"2 Tessalonicenses 1–3",note:"Dia 365 — 30/04/2027"},
@@ -1265,7 +1313,7 @@ const openWeeks = {};
 
 function setPF(f) {
   planFilter = f;
-  ['all','pending','done','partial'].forEach(id => {
+  ['all','at','nt','pending','done','partial'].forEach(id => {
     const el = document.getElementById('pf-'+id);
     if(el) el.classList.toggle('active', id===f);
   });
@@ -1295,6 +1343,10 @@ function renderPlan(scrollToToday) {
   let todayRowId = null;
 
   PLAN_FULL.forEach(ph => {
+    // Filtro por testamento
+    if(planFilter === 'at' && ph.phase !== 'AT') return;
+    if(planFilter === 'nt' && ph.phase !== 'NT') return;
+
     let phHtml = '';
     ph.weeks.forEach(wk => {
       const wkKey = wk.week;
@@ -1339,7 +1391,6 @@ function renderPlan(scrollToToday) {
           const note = dailyNotes[dayNum]||'';
           const rowId = isToday ? 'today-day-row' : '';
           if(isToday) todayRowId = 'today-day-row';
-          // Staggered animation delay
           const delay = idx * 40;
           phHtml += `<div class="day-row${done?' done':''}${partial?' partial':''}${isToday?' today-row':''}" 
             id="${rowId}"
@@ -1361,9 +1412,11 @@ function renderPlan(scrollToToday) {
     });
 
     if(!phHtml) return;
+    const phIcon = ph.phase === 'AT' ? '📜' : '✝';
+    const phLabel = ph.phase === 'AT' ? 'ANTIGO TESTAMENTO' : 'NOVO TESTAMENTO';
     html += `<div class="phase-hdr" style="background:linear-gradient(135deg,${ph.color}16,${ph.color}06);border:1px solid ${ph.color}28">
       <div class="phase-dot" style="background:${ph.color}"></div>
-      <div><div class="phase-name" style="color:${ph.color}">${ph.phase}</div><div class="phase-title">${ph.phaseTitle}</div></div>
+      <div><div class="phase-name" style="color:${ph.color}">${phIcon} ${phLabel}</div><div class="phase-title">${ph.phaseTitle}</div></div>
     </div>`;
     html += phHtml;
     html += `<div style="height:6px"></div>`;
@@ -1756,6 +1809,7 @@ function saveReminder() {
         reminderConfig = {time, days};
         localStorage.setItem(SK.REMINDER, JSON.stringify(reminderConfig));
         scheduleReminder();
+        sendReminderToSW();
         toast('🔔 Lembrete salvo!');
         updateReminderStatus();
       } else {
@@ -1929,21 +1983,38 @@ function triggerInstall() {
   }
 }
 
-// Service worker registration
+// Service worker registration — usa sw.js real do servidor
+let _swRegistration = null;
+
 if('serviceWorker' in navigator) {
-  const swCode = `
-    const CACHE = 'pviva-v1';
-    self.addEventListener('install', e => {
-      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    _swRegistration = reg;
+    // Quando o SW estiver pronto, envia a config do lembrete (se existir)
+    navigator.serviceWorker.ready.then(() => {
+      sendReminderToSW();
     });
-    self.addEventListener('fetch', e => {
-      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-    });
-  `;
-  const blob = new Blob([swCode], {type:'application/javascript'});
-  const url = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(url).catch(()=>{});
+  }).catch(err => {
+    console.warn('SW registration failed:', err);
+  });
 }
+
+/* Envia a config do lembrete para o Service Worker */
+function sendReminderToSW() {
+  if(!navigator.serviceWorker.controller) return;
+  if(reminderConfig && reminderConfig.time && reminderConfig.days && reminderConfig.days.length) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'SET_REMINDER',
+      config: reminderConfig
+    });
+  } else {
+    navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_REMINDER' });
+  }
+}
+
+/* Quando o SW toma controle (primeira vez após instalar), manda a config */
+navigator.serviceWorker && navigator.serviceWorker.addEventListener('controllerchange', () => {
+  sendReminderToSW();
+});
 
 /* ════════ SWIPE TO CLOSE MODAL ════════ */
 (function() {
