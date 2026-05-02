@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Palavra Viva">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0c0c14">
+<meta name="description" content="Plano de leitura bíblica 365 dias">
+<link rel="manifest" href="#" id="manifest-link">
+<title>Palavra Viva · 365 Dias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --bg:     #0c0c14;
+  --bg2:    #121220;
+  --bg3:    #191928;
+  --bg4:    #202038;
+  --bdr:    rgba(255,255,255,0.07);
+  --bdr2:   rgba(255,255,255,0.13);
+  --gold:   #e8b86d;
+  --gold2:  #f5d08a;
+  --goldL:  rgba(232,184,109,0.12);
+  --goldG:  linear-gradient(135deg,#e8b86d,#f5d08a);
+  --green:  #4caf7d;
+  --greenL: rgba(76,175,125,0.12);
+  --red:    #e05c5c;
+  --redL:   rgba(224,92,92,0.12);
+  --amber:  #f0a03a;
+  --amberL: rgba(240,160,58,0.12);
+  --blue:   #6b8cff;
+  --blueL:  rgba(107,140,255,0.12);
+  --purple: #a78bfa;
+  --tx:     #eeeeff;
+  --tx2:    #a0a0c0;
+  --tx3:    #606080;
+  --tx4:    #2e2e48;
+  --r:      16px; --r2: 12px; --r3: 8px;
+  --nav:    60px;
+  --safe:   env(safe-area-inset-bottom,0px);
+  --ease:   cubic-bezier(0.4,0,0.2,1);
+  --spring: cubic-bezier(0.34,1.56,0.64,1);
+  --fbody:  'Lora',Georgia,serif;
+  --fui:    'Plus Jakarta Sans',system-ui,sans-serif;
+  --fdisp:  'Playfair Display',serif;
+}
+[data-theme="light"] {
+  --bg:#f4f2ee;--bg2:#eae8e2;--bg3:#e0ddd6;--bg4:#d3d0c8;
+  --bdr:rgba(0,0,0,0.07);--bdr2:rgba(0,0,0,0.13);
+  --gold:#9a6e1a;--gold2:#b07f20;--goldL:rgba(154,110,26,0.1);
+  --goldG:linear-gradient(135deg,#c48830,#d9a040);
+  --green:#2a7a52;--greenL:rgba(42,122,82,0.1);
+  --red:#b83838;--redL:rgba(184,56,56,0.1);
+  --amber:#b07018;--amberL:rgba(176,112,24,0.1);
+  --blue:#3456c8;--blueL:rgba(52,86,200,0.1);
+  --purple:#6040c0;
+  --tx:#18181e;--tx2:#44445a;--tx3:#888898;--tx4:#c8c8d8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  min-height:100dvh;background:var(--bg);font-family:var(--fui);color:var(--tx);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s,color .3s;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.02;
+}
+button{border:none;background:none;cursor:pointer;font-family:inherit;color:inherit;outline:none}
+textarea,input{font-family:inherit;outline:none}
+::selection{background:var(--goldL);color:var(--gold2)}
+#root{position:relative;z-index:1}
+
+/* ── LAYOUT ── */
+.page{display:none;min-height:100dvh;padding-bottom:calc(var(--nav) + 16px + var(--safe))}
+.page.active{display:block;animation:fadeIn .22s var(--ease)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.inner{max-width:640px;margin:0 auto;padding:0 16px}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,12,20,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bdr);padding:10px 16px;transition:background .3s;
+}
+[data-theme="light"] .topbar{background:rgba(244,242,238,0.92)}
+.topbar-inner{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand-title{font-family:var(--fdisp);font-size:1.1rem;font-weight:700;color:var(--tx)}
+.brand-sub{font-size:0.62rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.09em;font-weight:600;margin-top:1px}
+.topbar-actions{display:flex;gap:6px;align-items:center}
+.icon-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--bdr);background:var(--bg3);
+  color:var(--tx2);display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:all .2s var(--ease);
+}
+.icon-btn:hover,.icon-btn:active{border-color:var(--gold);color:var(--gold);background:var(--goldL)}
+
+/* ── STREAK BADGE ── */
+.streak-badge{
+  display:flex;align-items:center;gap:4px;padding:4px 9px;
+  background:var(--bg3);border:1px solid var(--bdr);border-radius:20px;
+  font-size:.72rem;font-weight:800;color:var(--tx2);transition:all .3s var(--spring);
+}
+.streak-badge.active{background:rgba(240,100,30,0.12);border-color:rgba(240,100,30,0.3);color:#f0641e}
+.streak-num{font-family:var(--fdisp);font-size:.88rem;line-height:1}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{padding:8px 16px 0;background:var(--bg2);border-bottom:1px solid var(--bdr)}
+.prog-wrap-inner{max-width:640px;margin:0 auto}
+.prog-stats{display:flex;justify-content:space-between;margin-bottom:5px}
+.prog-stat-val{font-family:var(--fdisp);font-size:1.05rem;font-weight:700;color:var(--gold)}
+.prog-stat-lbl{font-size:0.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-top:1px}
+.prog-bar-bg{height:5px;border-radius:3px;background:var(--bg4);overflow:hidden;margin-bottom:6px}
+.prog-bar-fill{
+  height:100%;background:var(--goldG);border-radius:3px;
+  transition:width .7s var(--ease);position:relative;
+}
+.prog-bar-fill::after{
+  content:'';position:absolute;right:0;top:0;width:20px;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.35));border-radius:3px;
+}
+.prog-label{display:flex;justify-content:space-between;padding-bottom:8px;font-size:.6rem;font-weight:600;color:var(--tx3);letter-spacing:.04em;text-transform:uppercase}
+
+/* ── NAV ── */
+.nav-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(12,12,20,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--bdr);padding:0 8px;padding-bottom:var(--safe);
+  height:calc(var(--nav) + var(--safe));display:flex;align-items:flex-start;
+}
+[data-theme="light"] .nav-bar{background:rgba(244,242,238,0.97)}
+.nav-inner{width:100%;max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);height:var(--nav)}
+.nav-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:6px 4px;color:var(--tx3);transition:color .2s;-webkit-tap-highlight-color:transparent;
+}
+.nav-btn.active{color:var(--gold)}
+.nav-icon{
+  width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:17px;transition:all .2s var(--spring);background:transparent;
+}
+.nav-btn.active .nav-icon{background:var(--goldL);transform:scale(1.08)}
+.nav-label{font-size:.55rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{padding:18px 16px 8px;max-width:640px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between}
+.sec-title{font-family:var(--fdisp);font-size:1.2rem;font-weight:700}
+.sec-sub{font-size:.7rem;color:var(--tx3);margin-top:2px}
+
+/* ── PLAN CONTROLS ── */
+.plan-ctrl{padding:8px 16px 4px;max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:7px}
+.plan-search{
+  width:100%;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r2);
+  padding:9px 13px;color:var(--tx);font-size:.85rem;transition:border-color .2s;
+}
+.plan-search:focus{border-color:var(--gold)}
+.plan-search::placeholder{color:var(--tx3)}
+.filter-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.filter-row::-webkit-scrollbar{display:none}
+.fbtn{
+  white-space:nowrap;padding:7px 13px;background:var(--bg2);border:1px solid var(--bdr);
+  border-radius:var(--r2);font-size:.7rem;font-weight:700;color:var(--tx2);transition:all .2s;flex-shrink:0;
+}
+.fbtn.active{background:var(--goldL);border-color:rgba(232,184,109,0.4);color:var(--gold)}
+
+/* ── PLAN PHASE HEADER ── */
+.phase-hdr{
+  margin:10px 16px 6px;padding:9px 13px;border-radius:var(--r2);
+  display:flex;align-items:center;gap:10px;
+}
+.phase-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.phase-name{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.phase-title{font-size:.82rem;font-weight:700;color:var(--tx);margin-top:1px}
+
+/* ── WEEK GROUP ── */
+.week-group{margin:0 16px 10px}
+.week-hdr{
+  display:flex;align-items:center;gap:10px;padding:10px 13px;
+  background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r2) var(--r2) 0 0;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.week-hdr.closed{border-radius:var(--r2)}
+.week-title{flex:1;font-size:.8rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.week-sub{font-size:.67rem;color:var(--tx3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.week-badge{font-size:.62rem;font-weight:800;padding:2px 9px;border-radius:10px;background:var(--bg4);color:var(--tx3);flex-shrink:0}
+.week-badge.done{background:var(--greenL);color:var(--green)}
+.week-chevron{font-size:9px;color:var(--tx3);transition:transform .2s;flex-shrink:0}
+.week-chevron.open{transform:rotate(180deg)}
+.week-body{border:1px solid var(--bdr);border-top:none;border-radius:0 0 var(--r2) var(--r2);overflow:hidden}
+
+/* ── DAY ROW ── */
+.day-row{
+  display:flex;align-items:center;gap:12px;padding:12px 13px;
+  background:var(--bg2);border-bottom:1px solid var(--bdr);
+  cursor:pointer;transition:background .14s;-webkit-tap-highlight-color:transparent;
+  opacity:0;animation:dayRowIn .3s var(--ease) forwards;
+}
+@keyframes dayRowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.day-row:last-child{border-bottom:none}
+.day-row:hover,.day-row:active{background:var(--bg3)}
+.day-row.done{background:var(--greenL)}
+.day-row.done:hover{background:rgba(76,175,125,0.18)}
+.day-row.partial{background:rgba(240,160,58,0.05)}
+.day-row.today-row{background:var(--goldL)!important;border-left:3px solid var(--gold)!important}
+.day-check{
+  width:20px;height:20px;border-radius:6px;border:2px solid var(--bdr2);
+  background:var(--bg4);display:flex;align-items:center;justify-content:center;
+  font-size:10px;flex-shrink:0;transition:all .15s var(--spring);
+}
+.day-row.done .day-check{background:var(--green);border-color:var(--green);color:#fff}
+.day-row.partial .day-check{background:var(--amberL);border-color:rgba(240,160,58,0.5);color:var(--amber);font-size:9px;font-weight:800}
+.day-info{flex:1;min-width:0}
+.day-num{font-size:.6rem;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em}
+.day-ref{font-size:.88rem;font-weight:600;color:var(--tx);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-row.done .day-ref{color:var(--tx2);text-decoration:line-through}
+.day-note-txt{font-size:.7rem;color:var(--tx3);margin-top:2px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-ann{font-size:.7rem;color:var(--gold);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-arrow{font-size:10px;color:var(--tx3);flex-shrink:0}
+.empty-state{text-align:center;padding:48px 20px;color:var(--tx3);font-size:.88rem;line-height:1.7}
+.empty-state .icon{font-size:2.5rem;display:block;margin-bottom:12px}
+
+/* ── TODAY BADGE ── */
+.today-badge{
+  display:inline-flex;align-items:center;gap:3px;font-size:.55rem;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:#1a0e00;
+  border-radius:6px;padding:2px 6px;margin-left:5px;vertical-align:middle;
+  animation:todayPulse 2s ease-in-out infinite;
+}
+@keyframes todayPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,184,109,.5)}50%{box-shadow:0 0 0 4px rgba(232,184,109,0)}}
+
+/* ── CALENDAR PAGE ── */
+.cal-card{margin:0 16px 16px;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bdr)}
+.cal-month{font-family:var(--fdisp);font-size:1rem;font-weight:700}
+.cal-arr{
+  width:30px;height:30px;border-radius:8px;background:var(--bg3);border:1px solid var(--bdr);
+  font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--tx2);
+  transition:all .18s;
+}
+.cal-arr:hover{border-color:var(--gold);color:var(--gold)}
+.cal-grid{padding:10px 12px}
+.cal-wds{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:5px}
+.cal-wd{text-align:center;font-size:.58rem;font-weight:700;color:var(--tx3);letter-spacing:.07em;text-transform:uppercase;padding:2px}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day{
+  aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:600;cursor:pointer;transition:all .18s;
+  position:relative;border:1px solid transparent;
+}
+.cal-day.done{background:var(--green);color:#fff;font-weight:800;box-shadow:0 2px 8px rgba(76,175,125,.32)}
+.cal-day.partial{background:var(--amber);color:#fff;font-weight:700}
+.cal-day.missed{background:var(--redL);color:var(--red);border-color:rgba(224,92,92,.35)}
+.cal-day.today-cal{border:2px solid var(--gold);color:var(--gold);background:var(--goldL);font-weight:800}
+.cal-day.future{color:var(--tx4);cursor:default}
+.cal-day.empty{background:transparent;cursor:default;border:none}
+.cal-legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 16px 12px;border-top:1px solid var(--bdr)}
+.cal-li{display:flex;align-items:center;gap:5px;font-size:.63rem;color:var(--tx3);font-weight:600}
+.cal-dot{width:8px;height:8px;border-radius:3px}
+
+/* ── SETTINGS PAGE ── */
+.stg-sec{padding:14px 16px 5px;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);max-width:640px;margin:0 auto}
+.stg-list{margin:0 16px 10px;border-radius:var(--r2);overflow:hidden;border:1px solid var(--bdr)}
+.stg-item{
+  display:flex;align-items:center;gap:12px;padding:13px 15px;
+  background:var(--bg2);border-bottom:1px solid var(--bdr);
+  cursor:pointer;transition:background .14s;
+}
+.stg-item:last-child{border-bottom:none}
+.stg-item:hover{background:var(--bg3)}
+.stg-iico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.stg-itxt{flex:1}
+.stg-ilbl{font-size:.87rem;font-weight:600}
+.stg-isub{font-size:.7rem;color:var(--tx3);margin-top:1px}
+.stg-arr{font-size:11px;color:var(--tx3)}
+.stg-item.no-click{cursor:default}
+.stg-item.no-click:hover{background:var(--bg2)}
+.inp{
+  width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r2);
+  padding:10px 13px;color:var(--tx);font-size:.87rem;transition:border-color .2s;margin-top:8px;
+}
+.inp:focus{border-color:var(--gold)}
+.btn-save{
+  width:100%;margin-top:8px;padding:11px;background:var(--goldG);color:#1a0e00;
+  border-radius:var(--r2);font-size:.83rem;font-weight:700;transition:filter .2s;
+}
+.btn-save:hover{filter:brightness(1.1)}
+
+/* ── REMINDER CHECKBOXES ── */
+.reminder-days{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.day-ck-lbl{
+  display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
+}
+.day-ck-lbl input{display:none}
+.day-ck-box{
+  width:34px;height:34px;border-radius:8px;background:var(--bg4);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;
+  color:var(--tx3);transition:all .18s;
+}
+.day-ck-lbl input:checked + .day-ck-box{background:var(--goldL);border-color:rgba(232,184,109,.4);color:var(--gold)}
+
+/* ── MODAL ── */
+.modal-ov{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.62);
+  backdrop-filter:blur(6px);z-index:200;align-items:flex-end;justify-content:center;
+}
+.modal-ov.show{display:flex}
+.modal-sheet{
+  background:var(--bg2);border-radius:var(--r) var(--r) 0 0;border:1px solid var(--bdr);
+  border-bottom:none;width:100%;max-width:640px;padding:10px 20px 32px;
+  animation:slideUp .28s var(--spring);max-height:92dvh;overflow-y:auto;
+}
+@keyframes slideUp{from{transform:translateY(80px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-handle{width:36px;height:4px;background:var(--bdr2);border-radius:2px;margin:0 auto 14px}
+.modal-title{font-family:var(--fdisp);font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:.82rem;color:var(--tx2);line-height:1.6;margin-bottom:14px}
+.btn-row{display:flex;gap:8px;margin-top:4px}
+.btn-sec{flex:1;padding:12px;background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r2);font-size:.83rem;font-weight:600;color:var(--tx2);transition:all .18s}
+.btn-sec:hover{border-color:var(--bdr2);color:var(--tx)}
+.btn-pri{flex:2;padding:12px;background:var(--goldG);color:#1a0e00;border-radius:var(--r2);font-size:.83rem;font-weight:700;transition:filter .18s}
+.btn-pri:hover{filter:brightness(1.1)}
+.btn-dng{flex:1;padding:12px;background:var(--redL);border:1px solid rgba(224,92,92,.3);border-radius:var(--r2);font-size:.83rem;font-weight:700;color:var(--red)}
+
+/* ── MARK ALL TOGGLE ── */
+.mark-all-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;border-radius:10px;background:var(--bg3);border:1px solid var(--bdr);
+  margin-bottom:10px;
+}
+.mark-all-lbl{font-size:.72rem;font-weight:700;color:var(--tx2)}
+.mark-all-btn{
+  padding:5px 13px;border-radius:8px;background:var(--goldL);border:1px solid rgba(232,184,109,.3);
+  color:var(--gold);font-size:.7rem;font-weight:800;transition:all .18s;
+}
+.mark-all-btn:hover{background:rgba(232,184,109,.2)}
+.mark-all-btn.unmark{background:var(--redL);border-color:rgba(224,92,92,.3);color:var(--red)}
+
+/* ── CHAPTER ITEMS IN MODAL ── */
+.chap-item{
+  display:flex;align-items:center;gap:10px;padding:11px 12px;
+  border-radius:10px;cursor:pointer;transition:all .15s;
+  background:var(--bg3);border:1px solid var(--bdr);margin-bottom:6px;
+  -webkit-tap-highlight-color:transparent;
+}
+.chap-item.done{background:var(--greenL);border-color:rgba(76,175,125,.3)}
+.chap-item:active{transform:scale(.98)}
+.chap-ck{
+  width:22px;height:22px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+  transition:all .18s var(--spring);
+  background:var(--bg4);border:2px solid var(--bdr2);
+}
+.chap-item.done .chap-ck{background:var(--green);border-color:var(--green);color:#fff;animation:ckpop .3s var(--spring)}
+@keyframes ckpop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+.chap-lbl{flex:1;font-size:.88rem;font-weight:600;color:var(--tx)}
+.chap-item.done .chap-lbl{color:var(--tx2);text-decoration:line-through}
+.chap-n{font-size:.62rem;font-weight:700;color:var(--tx3);background:var(--bg4);border-radius:5px;padding:2px 7px}
+.status-bar{
+  display:flex;align-items:center;gap:8px;padding:9px 12px;
+  border-radius:10px;background:var(--bg3);border:1px solid var(--bdr);
+  margin-bottom:12px;font-size:.8rem;font-weight:600;
+}
+
+/* ── PRAYER SECTIONS ── */
+.prayer-section{
+  border-radius:10px;border:1px solid var(--bdr);margin-bottom:10px;overflow:hidden;
+}
+.prayer-hdr{
+  display:flex;align-items:center;gap:8px;padding:10px 12px;
+  background:var(--bg3);cursor:pointer;user-select:none;transition:background .14s;
+  -webkit-tap-highlight-color:transparent;
+}
+.prayer-hdr:hover{background:var(--bg4)}
+.prayer-hdr-txt{flex:1;font-size:.75rem;font-weight:700}
+.prayer-chevron{font-size:9px;color:var(--tx3);transition:transform .2s}
+.prayer-chevron.open{transform:rotate(180deg)}
+.prayer-body{
+  padding:12px;background:var(--bg2);border-top:1px solid var(--bdr);
+  font-family:var(--fbody);font-size:.87rem;line-height:1.75;color:var(--tx2);
+  font-style:italic;display:none;
+}
+.prayer-body.open{display:block}
+
+/* ── NOTES ── */
+.notes-ta{
+  width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r2);
+  padding:11px 13px;color:var(--tx);font-size:.87rem;line-height:1.6;resize:none;
+  min-height:72px;transition:border-color .2s;
+}
+.notes-ta:focus{border-color:var(--gold)}
+.notes-ta::placeholder{color:var(--tx3)}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:calc(var(--nav) + var(--safe) + 14px);left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--bg4);border:1px solid var(--bdr2);color:var(--tx);
+  border-radius:20px;padding:9px 18px;font-size:.81rem;font-weight:600;
+  white-space:nowrap;z-index:400;opacity:0;pointer-events:none;
+  transition:all .25s var(--spring);box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.celebration{background:linear-gradient(135deg,#1a1200,#201800);border-color:rgba(232,184,109,.4);color:var(--gold)}
+
+/* ── CONFETTI CANVAS ── */
+#confetti-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:500;
+  display:none;
+}
+
+/* ── TAG ── */
+.tag{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:10px}
+.tag.gold{background:var(--goldL);color:var(--gold);border:1px solid rgba(232,184,109,.2)}
+.tag.green{background:var(--greenL);color:var(--green);border:1px solid rgba(76,175,125,.2)}
+.tag.amber{background:var(--amberL);color:var(--amber);border:1px solid rgba(240,160,58,.2)}
+.tag.red{background:var(--redL);color:var(--red);border:1px solid rgba(224,92,92,.2)}
+
+/* ── VERSE CARD ── */
+.verse-banner{
+  margin:0 16px 10px;background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border:1px solid rgba(232,184,109,.14);border-radius:var(--r);padding:16px;
+  position:relative;overflow:hidden;
+}
+.verse-banner::before{
+  content:'❝';position:absolute;top:-14px;left:8px;font-size:80px;
+  color:var(--goldL);font-family:Georgia,serif;line-height:1;pointer-events:none;
+}
+.verse-txt{font-family:var(--fbody);font-size:.95rem;line-height:1.75;color:var(--tx);font-style:italic;position:relative;z-index:1}
+.verse-ref{margin-top:8px;font-size:.7rem;font-weight:700;color:var(--gold);letter-spacing:.05em}
+
+/* ── DAILY LOG SECTION (Calendar page bottom) ── */
+.log-entry{
+  margin:0 16px 8px;padding:11px 13px;background:var(--bg2);border:1px solid var(--bdr);
+  border-radius:var(--r2);display:flex;gap:12px;align-items:flex-start;cursor:pointer;
+}
+.log-entry:hover{background:var(--bg3)}
+.log-status{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+
+/* ── INSTALL BTN ── */
+.install-btn{
+  display:none;align-items:center;gap:8px;width:100%;padding:12px 15px;
+  background:var(--blueL);border:1px solid rgba(107,140,255,.25);
+  border-radius:var(--r2);font-size:.85rem;font-weight:700;color:var(--blue);
+  transition:all .2s;cursor:pointer;
+}
+.install-btn:hover{background:rgba(107,140,255,.2)}
+.install-btn.visible{display:flex}
+
+@media(min-width:480px){.brand-title{font-size:1.2rem}}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div id="root">
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <div class="brand-title">Palavra Viva</div>
+      <div class="brand-sub">Plano 365 Dias · ICM</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="streak-badge" id="streak-badge">
+        <span>🔥</span><span class="streak-num" id="streak-num">0</span>
+      </div>
+      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Tema">☀</button>
+      <button class="icon-btn" onclick="openModal('backup-modal')" title="Backup">⬇</button>
+    </div>
+  </div>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="prog-wrap">
+  <div class="prog-wrap-inner">
+    <div class="prog-stats">
+      <div><div class="prog-stat-val" id="prog-val">0%</div><div class="prog-stat-lbl">Progresso</div></div>
+      <div style="text-align:right"><div class="prog-stat-val" id="prog-chaps" style="color:var(--green)">0</div><div class="prog-stat-lbl">de 1199 caps</div></div>
+    </div>
+    <div class="prog-bar-bg"><div class="prog-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-label"><span id="prog-lbl-l">0 capítulos lidos</span><span id="prog-lbl-r">0 / 1199</span></div>
+  </div>
+</div>
+
+<!-- PAGE: PLANO (homepage) -->
+<div class="page active" id="page-plan">
+  <div class="sec-hdr">
+    <div>
+      <div class="sec-title">Plano Completo</div>
+      <div class="sec-sub">365 dias · 1199 capítulos</div>
+    </div>
+  </div>
+
+  <!-- Verse of the day -->
+  <div class="verse-banner" id="verse-banner">
+    <p class="verse-txt" id="verse-txt">…</p>
+    <p class="verse-ref" id="verse-ref">…</p>
+  </div>
+
+  <div class="plan-ctrl">
+    <input class="plan-search" id="plan-search" type="search" placeholder="🔍 Buscar dia, livro, tema…" oninput="renderPlan()">
+    <div class="filter-row">
+      <button class="fbtn active" id="pf-all"     onclick="setPF('all')">Todos</button>
+      <button class="fbtn"        id="pf-pending"  onclick="setPF('pending')">⏳ Pendentes</button>
+      <button class="fbtn"        id="pf-done"     onclick="setPF('done')">✅ Concluídos</button>
+      <button class="fbtn"        id="pf-partial"  onclick="setPF('partial')">◑ Parciais</button>
+    </div>
+  </div>
+  <div id="plan-content"></div>
+</div>
+
+<!-- PAGE: CALENDÁRIO -->
+<div class="page" id="page-cal">
+  <div class="sec-hdr">
+    <div>
+      <div class="sec-title">Calendário</div>
+      <div class="sec-sub">Histórico de leituras por data</div>
+    </div>
+  </div>
+  <div class="cal-card">
+    <div class="cal-nav">
+      <button class="cal-arr" onclick="calPrev()">‹</button>
+      <span class="cal-month" id="cal-month">—</span>
+      <button class="cal-arr" onclick="calNext()">›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-wds">
+        <div class="cal-wd">D</div><div class="cal-wd">S</div><div class="cal-wd">T</div>
+        <div class="cal-wd">Q</div><div class="cal-wd">Q</div><div class="cal-wd">S</div><div class="cal-wd">S</div>
+      </div>
+      <div class="cal-days" id="cal-days"></div>
+    </div>
+    <div class="cal-legend">
+      <div class="cal-li"><div class="cal-dot" style="background:var(--green)"></div>Completo</div>
+      <div class="cal-li"><div class="cal-dot" style="background:var(--amber)"></div>Parcial</div>
+      <div class="cal-li"><div class="cal-dot" style="background:var(--red)"></div>Faltou</div>
+      <div class="cal-li"><div class="cal-dot" style="background:var(--gold)"></div>Hoje</div>
+    </div>
+  </div>
+
+  <div class="sec-hdr" style="padding-top:4px">
+    <div><div class="sec-title" style="font-size:1rem">Leituras Concluídas</div></div>
+    <button class="fbtn active" id="log-filter-btn" onclick="toggleLogFilter()">Recentes</button>
+  </div>
+  <div id="log-list"></div>
+</div>
+
+<!-- PAGE: CONFIG -->
+<div class="page" id="page-cfg">
+  <div class="sec-hdr"><div><div class="sec-title">Configurações</div></div></div>
+
+  <div class="stg-sec">Progresso</div>
+  <div class="stg-list">
+    <div class="stg-item no-click" style="flex-direction:column;align-items:flex-start">
+      <div style="font-size:.7rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em">Data de Início do Plano</div>
+      <input class="inp" type="date" id="start-date-inp">
+      <button class="btn-save" onclick="saveStart()">Salvar Data</button>
+    </div>
+  </div>
+
+  <div class="stg-sec">Aparência</div>
+  <div class="stg-list">
+    <div class="stg-item" onclick="toggleTheme()">
+      <div class="stg-iico" style="background:var(--goldL)">🎨</div>
+      <div class="stg-itxt">
+        <div class="stg-ilbl">Modo Claro / Escuro</div>
+        <div class="stg-isub" id="theme-lbl">Modo escuro ativo</div>
+      </div>
+      <div class="stg-arr">›</div>
+    </div>
+  </div>
+
+  <div class="stg-sec">Lembrete de Leitura</div>
+  <div class="stg-list">
+    <div class="stg-item no-click" style="flex-direction:column;align-items:flex-start;gap:10px">
+      <div style="width:100%">
+        <div style="font-size:.7rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Horário</div>
+        <input class="inp" type="time" id="reminder-time" style="margin-top:0">
+      </div>
+      <div style="width:100%">
+        <div style="font-size:.7rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Dias da semana</div>
+        <div class="reminder-days">
+          <label class="day-ck-lbl"><input type="checkbox" name="rday" value="0" id="rd0"><div class="day-ck-box">Dom</div></label>
+          <label class="day-ck-lbl"><input type="checkbox" name="rday" value="1" id="rd1"><div class="day-ck-box">Seg</div></label>
+          <label class="day-ck-lbl"><input type="checkbox" name="rday" value="2" id="rd2"><div class="day-ck-box">Ter</div></label>
+          <label class="day-ck-lbl"><input type="checkbox" name="rday" value="3" id="rd3"><div class="day-ck-box">Qua</div></label>
+          <label class="day-ck-lbl"><input type="checkbox" name="rday" value="4" id="rd4"><div class="day-ck-box">Qui</div></label>
+          <label class="day-ck-lbl"><input type="checkbox" name="rday" value="5" id="rd5"><div class="day-ck-box">Sex</div></label>
+          <label class="day-ck-lbl"><input type="checkbox" name="rday" value="6" id="rd6"><div class="day-ck-box">Sáb</div></label>
+        </div>
+      </div>
+      <button class="btn-save" onclick="saveReminder()">Salvar Lembrete</button>
+      <div id="reminder-status" style="font-size:.7rem;color:var(--tx3);margin-top:-4px"></div>
+    </div>
+  </div>
+
+  <div class="stg-sec">App</div>
+  <div class="stg-list">
+    <div class="stg-item" id="install-item" style="display:none" onclick="triggerInstall()">
+      <div class="stg-iico" style="background:var(--blueL)">📲</div>
+      <div class="stg-itxt"><div class="stg-ilbl">Instalar App</div><div class="stg-isub">Adicionar à tela inicial</div></div>
+      <div class="stg-arr">›</div>
+    </div>
+  </div>
+
+  <div class="stg-sec">Dados</div>
+  <div class="stg-list">
+    <div class="stg-item" onclick="exportBackup()">
+      <div class="stg-iico" style="background:var(--blueL)">💾</div>
+      <div class="stg-itxt"><div class="stg-ilbl">Exportar Backup</div><div class="stg-isub">Salva todos os dados em JSON</div></div>
+      <div class="stg-arr">›</div>
+    </div>
+    <div class="stg-item" onclick="document.getElementById('file-inp').click()">
+      <div class="stg-iico" style="background:var(--greenL)">📂</div>
+      <div class="stg-itxt"><div class="stg-ilbl">Importar Backup</div><div class="stg-isub">Restaurar dados salvos</div></div>
+      <div class="stg-arr">›</div>
+    </div>
+    <div class="stg-item" onclick="openModal('reset-modal')">
+      <div class="stg-iico" style="background:var(--redL)">🗑</div>
+      <div class="stg-itxt"><div class="stg-ilbl">Resetar Dados</div><div class="stg-isub">Remove todo o progresso</div></div>
+      <div class="stg-arr">›</div>
+    </div>
+  </div>
+  <input type="file" id="file-inp" accept=".json" style="display:none">
+  <div style="height:20px"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-btn active" id="nav-plan" onclick="goPage('plan')">
+      <div class="nav-icon">📋</div><span class="nav-label">Plano</span>
+    </button>
+    <button class="nav-btn" id="nav-cal" onclick="goPage('cal')">
+      <div class="nav-icon">📅</div><span class="nav-label">Calendário</span>
+    </button>
+    <button class="nav-btn" id="nav-cfg" onclick="goPage('cfg')">
+      <div class="nav-icon">⚙️</div><span class="nav-label">Config</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MODALS -->
+
+<!-- Day modal -->
+<div class="modal-ov" id="day-modal" onclick="if(event.target===this)closeModal('day-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="font-size:.63rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:3px" id="dm-phase">—</div>
+    <div class="modal-title" id="dm-title">Dia —</div>
+    <div style="font-size:.83rem;color:var(--tx2);margin-bottom:2px" id="dm-ref">—</div>
+    <div style="font-size:.72rem;color:var(--tx3);font-style:italic;margin-bottom:14px" id="dm-note">—</div>
+
+    <!-- Prayer Before -->
+    <div class="prayer-section" id="prayer-before-section">
+      <div class="prayer-hdr" onclick="togglePrayer('before')">
+        <span>🙏</span>
+        <span class="prayer-hdr-txt">Oração Inicial</span>
+        <span class="prayer-chevron" id="prayer-before-chev">▼</span>
+      </div>
+      <div class="prayer-body" id="prayer-before-body"></div>
+    </div>
+
+    <div style="font-size:.65rem;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin:10px 0 7px">Capítulos lidos</div>
+
+    <!-- Mark All -->
+    <div class="mark-all-row">
+      <span class="mark-all-lbl">Marcar em lote</span>
+      <button class="mark-all-btn" id="mark-all-btn" onclick="toggleMarkAll()">Marcar todos ✓</button>
+    </div>
+
+    <div id="dm-chaps" style="margin-bottom:12px"></div>
+    <div class="status-bar" id="dm-status"></div>
+
+    <!-- Prayer After -->
+    <div class="prayer-section" id="prayer-after-section">
+      <div class="prayer-hdr" onclick="togglePrayer('after')">
+        <span>✨</span>
+        <span class="prayer-hdr-txt">Oração Final</span>
+        <span class="prayer-chevron" id="prayer-after-chev">▼</span>
+      </div>
+      <div class="prayer-body" id="prayer-after-body"></div>
+    </div>
+
+    <div style="font-size:.65rem;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;margin:10px 0 6px">✏ Anotação</div>
+    <textarea class="notes-ta" id="dm-notes" rows="2" placeholder="Versículo marcante, reflexão, oração pessoal…"></textarea>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn-sec" onclick="closeModal('day-modal')">Cancelar</button>
+      <button class="btn-pri" onclick="saveDayModal()">Salvar ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset modal -->
+<div class="modal-ov" id="reset-modal" onclick="if(event.target===this)closeModal('reset-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚠ Resetar Dados</div>
+    <p class="modal-sub">Isso apagará todo o progresso permanentemente. Tem certeza?</p>
+    <div class="btn-row">
+      <button class="btn-sec" onclick="closeModal('reset-modal')">Cancelar</button>
+      <button class="btn-dng" onclick="doReset()">Apagar Tudo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Backup modal -->
+<div class="modal-ov" id="backup-modal" onclick="if(event.target===this)closeModal('backup-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💾 Backup de Dados</div>
+    <div class="btn-row" style="flex-direction:column;gap:8px">
+      <button class="btn-pri" onclick="exportBackup();closeModal('backup-modal')">⬇ Exportar Dados</button>
+      <button class="btn-sec" onclick="document.getElementById('file-inp').click();closeModal('backup-modal')">📂 Importar Dados</button>
+      <button class="btn-sec" onclick="closeModal('backup-modal')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+</div><!-- #root -->
+<script>
+'use strict';
+
+/* ════════ PLAN DATA ════════ */
+const PLAN_FULL = [
+  {phase:"PLANO 365",phaseTitle:"Leitura Bíblica 365 Dias",color:"#e8b86d",weeks:[
+    {week:1,title:"Plano 2026-2027",subtitle:"01/05/2026 – 30/04/2027",days:[
+      {day:1,ref:"Gênesis 1–3",note:"Dia 1 — 01/05/2026"},
+      {day:2,ref:"Gênesis 4–6",note:"Dia 2 — 02/05/2026"},
+      {day:3,ref:"João 1–2",note:"Dia 3 — 03/05/2026"},
+      {day:4,ref:"João 3–4",note:"Dia 4 — 04/05/2026"},
+      {day:5,ref:"João 3–4",note:"Dia 5 — 05/05/2026"},
+      {day:6,ref:"Gênesis 7–9",note:"Dia 6 — 06/05/2026"},
+      {day:7,ref:"Gênesis 10–12",note:"Dia 7 — 07/05/2026"},
+      {day:8,ref:"Gênesis 13–16",note:"Dia 8 — 08/05/2026"},
+      {day:9,ref:"João 5–6",note:"Dia 9 — 09/05/2026"},
+      {day:10,ref:"João 7–8",note:"Dia 10 — 10/05/2026"},
+      {day:11,ref:"Gênesis 13–16",note:"Dia 11 — 11/05/2026"},
+      {day:12,ref:"João 9–10",note:"Dia 12 — 12/05/2026"},
+      {day:13,ref:"Gênesis 17–19",note:"Dia 13 — 13/05/2026"},
+      {day:14,ref:"João 11–12",note:"Dia 14 — 14/05/2026"},
+      {day:15,ref:"João 13–15",note:"Dia 15 — 15/05/2026"},
+      {day:16,ref:"Gênesis 20–22",note:"Dia 16 — 16/05/2026"},
+      {day:17,ref:"Gênesis 23–24",note:"Dia 17 — 17/05/2026"},
+      {day:18,ref:"Gênesis 25–27",note:"Dia 18 — 18/05/2026"},
+      {day:19,ref:"João 16–18",note:"Dia 19 — 19/05/2026"},
+      {day:20,ref:"João 19–21",note:"Dia 20 — 20/05/2026"},
+      {day:21,ref:"Gênesis 28–30",note:"Dia 21 — 21/05/2026"},
+      {day:22,ref:"Gênesis 31–32",note:"Dia 22 — 22/05/2026"},
+      {day:23,ref:"Marcos 1–2",note:"Dia 23 — 23/05/2026"},
+      {day:24,ref:"Marcos 3–4",note:"Dia 24 — 24/05/2026"},
+      {day:25,ref:"Gênesis 33–35",note:"Dia 25 — 25/05/2026"},
+      {day:26,ref:"Gênesis 36–37",note:"Dia 26 — 26/05/2026"},
+      {day:27,ref:"Gênesis 38–40",note:"Dia 27 — 27/05/2026"},
+      {day:28,ref:"Gênesis 41–42",note:"Dia 28 — 28/05/2026"},
+      {day:29,ref:"Marcos 5–6",note:"Dia 29 — 29/05/2026"},
+      {day:30,ref:"Marcos 7–8",note:"Dia 30 — 30/05/2026"},
+      {day:31,ref:"Gênesis 43–45",note:"Dia 31 — 31/05/2026"},
+      {day:32,ref:"Marcos 9–10",note:"Dia 32 — 01/06/2026"},
+      {day:33,ref:"Gênesis 46–47",note:"Dia 33 — 02/06/2026"},
+      {day:34,ref:"Gênesis 48–50",note:"Dia 34 — 03/06/2026"},
+      {day:35,ref:"Êxodo 1–4",note:"Dia 35 — 04/06/2026"},
+      {day:36,ref:"Marcos 11–12",note:"Dia 36 — 05/06/2026"},
+      {day:37,ref:"Marcos 13–14",note:"Dia 37 — 06/06/2026"},
+      {day:38,ref:"Êxodo 5–7",note:"Dia 38 — 07/06/2026"},
+      {day:39,ref:"Êxodo 8–10",note:"Dia 39 — 08/06/2026"},
+      {day:40,ref:"Marcos 15–16",note:"Dia 40 — 09/06/2026"},
+      {day:41,ref:"Êxodo 11–13",note:"Dia 41 — 10/06/2026"},
+      {day:42,ref:"Êxodo 14–16",note:"Dia 42 — 11/06/2026"},
+      {day:43,ref:"Lucas 1",note:"Dia 43 — 12/06/2026"},
+      {day:44,ref:"Lucas 2–3",note:"Dia 44 — 13/06/2026"},
+      {day:45,ref:"Lucas 4–5",note:"Dia 45 — 14/06/2026"},
+      {day:46,ref:"Êxodo 17–20",note:"Dia 46 — 15/06/2026"},
+      {day:47,ref:"Êxodo 21–23",note:"Dia 47 — 16/06/2026"},
+      {day:48,ref:"Lucas 6–7",note:"Dia 48 — 17/06/2026"},
+      {day:49,ref:"Êxodo 24–26",note:"Dia 49 — 18/06/2026"},
+      {day:50,ref:"Êxodo 27–29",note:"Dia 50 — 19/06/2026"},
+      {day:51,ref:"Lucas 8–9",note:"Dia 51 — 20/06/2026"},
+      {day:52,ref:"Êxodo 30–32",note:"Dia 52 — 21/06/2026"},
+      {day:53,ref:"Êxodo 33–35",note:"Dia 53 — 22/06/2026"},
+      {day:54,ref:"Lucas 10–11",note:"Dia 54 — 23/06/2026"},
+      {day:55,ref:"Lucas 12–13",note:"Dia 55 — 24/06/2026"},
+      {day:56,ref:"Lucas 14–16",note:"Dia 56 — 25/06/2026"},
+      {day:57,ref:"Êxodo 36–39",note:"Dia 57 — 26/06/2026"},
+      {day:58,ref:"Êxodo 39–40",note:"Dia 58 — 27/06/2026"},
+      {day:59,ref:"Lucas 17–18",note:"Dia 59 — 28/06/2026"},
+      {day:60,ref:"Lucas 19–20",note:"Dia 60 — 29/06/2026"},
+      {day:61,ref:"Lucas 21–22",note:"Dia 61 — 30/06/2026"},
+      {day:62,ref:"Lucas 23–24",note:"Dia 62 — 01/07/2026"},
+      {day:63,ref:"Levítico 1–4",note:"Dia 63 — 02/07/2026"},
+      {day:64,ref:"Hebreus 1–5",note:"Dia 64 — 03/07/2026"},
+      {day:65,ref:"Levítico 5–7",note:"Dia 65 — 04/07/2026"},
+      {day:66,ref:"Hebreus 6–10",note:"Dia 66 — 05/07/2026"},
+      {day:67,ref:"Levítico 8–10",note:"Dia 67 — 06/07/2026"},
+      {day:68,ref:"Levítico 11–13",note:"Dia 68 — 07/07/2026"},
+      {day:69,ref:"Hebreus 11–13",note:"Dia 69 — 08/07/2026"},
+      {day:70,ref:"Levítico 14–15",note:"Dia 70 — 09/07/2026"},
+      {day:71,ref:"Levítico 16–18",note:"Dia 71 — 10/07/2026"},
+      {day:72,ref:"Salmos 1–7",note:"Dia 72 — 11/07/2026"},
+      {day:73,ref:"Levítico 19–21",note:"Dia 73 — 12/07/2026"},
+      {day:74,ref:"Salmos 8–14",note:"Dia 74 — 13/07/2026"},
+      {day:75,ref:"Levítico 22–23",note:"Dia 75 — 14/07/2026"},
+      {day:76,ref:"Levítico 24–25",note:"Dia 76 — 15/07/2026"},
+      {day:77,ref:"Salmos 15–18",note:"Dia 77 — 16/07/2026"},
+      {day:78,ref:"Levítico 26–27",note:"Dia 78 — 17/07/2026"},
+      {day:79,ref:"Números 1–2",note:"Dia 79 — 18/07/2026"},
+      {day:80,ref:"Mateus 1–2",note:"Dia 80 — 19/07/2026"},
+      {day:81,ref:"Números 3–4",note:"Dia 81 — 20/07/2026"},
+      {day:82,ref:"Mateus 3–4",note:"Dia 82 — 21/07/2026"},
+      {day:83,ref:"Números 5–7",note:"Dia 83 — 22/07/2026"},
+      {day:84,ref:"Números 8–10",note:"Dia 84 — 23/07/2026"},
+      {day:85,ref:"Salmos 19–23",note:"Dia 85 — 24/07/2026"},
+      {day:86,ref:"Mateus 5–6",note:"Dia 86 — 25/07/2026"},
+      {day:87,ref:"Números 11–13",note:"Dia 87 — 26/07/2026"},
+      {day:88,ref:"Números 14–15",note:"Dia 88 — 27/07/2026"},
+      {day:89,ref:"Mateus 7–9",note:"Dia 89 — 28/07/2026"},
+      {day:90,ref:"Mateus 10–11",note:"Dia 90 — 29/07/2026"},
+      {day:91,ref:"Números 16–18",note:"Dia 91 — 30/07/2026"},
+      {day:92,ref:"Números 19–21",note:"Dia 92 — 31/07/2026"},
+      {day:93,ref:"Mateus 10–11",note:"Dia 93 — 01/08/2026"},
+      {day:94,ref:"Mateus 12–13",note:"Dia 94 — 02/08/2026"},
+      {day:95,ref:"Salmos 24–29",note:"Dia 95 — 03/08/2026"},
+      {day:96,ref:"Números 22–24",note:"Dia 96 — 04/08/2026"},
+      {day:97,ref:"Números 25–26",note:"Dia 97 — 05/08/2026"},
+      {day:98,ref:"Mateus 14–15",note:"Dia 98 — 06/08/2026"},
+      {day:99,ref:"Mateus 16–18",note:"Dia 99 — 07/08/2026"},
+      {day:100,ref:"Números 27–29",note:"Dia 100 — 08/08/2026"},
+      {day:101,ref:"Números 30–32",note:"Dia 101 — 09/08/2026"},
+      {day:102,ref:"Números 33–34",note:"Dia 102 — 10/08/2026"},
+      {day:103,ref:"Mateus 19–21",note:"Dia 103 — 11/08/2026"},
+      {day:104,ref:"Números 35–36",note:"Dia 104 — 12/08/2026"},
+      {day:105,ref:"Mateus 22–23",note:"Dia 105 — 13/08/2026"},
+      {day:106,ref:"Salmos 30–34",note:"Dia 106 — 14/08/2026"},
+      {day:107,ref:"Deuteronômio 1–2",note:"Dia 107 — 15/08/2026"},
+      {day:108,ref:"Deuteronômio 3–4",note:"Dia 108 — 16/08/2026"},
+      {day:109,ref:"Mateus 24–26",note:"Dia 109 — 17/08/2026"},
+      {day:110,ref:"Malaquias 1–4",note:"Dia 110 — 18/08/2026"},
+      {day:111,ref:"Deuteronômio 5–7",note:"Dia 111 — 19/08/2026"},
+      {day:112,ref:"Deuteronômio 8–11",note:"Dia 112 — 20/08/2026"},
+      {day:113,ref:"Mateus 27–28",note:"Dia 113 — 21/08/2026"},
+      {day:114,ref:"Salmos 35–37",note:"Dia 114 — 22/08/2026"},
+      {day:115,ref:"Salmos 38–42",note:"Dia 115 — 23/08/2026"},
+      {day:116,ref:"Deuteronômio 12–14",note:"Dia 116 — 24/08/2026"},
+      {day:117,ref:"Deuteronômio 15–18",note:"Dia 117 — 25/08/2026"},
+      {day:118,ref:"Salmos 43–48",note:"Dia 118 — 26/08/2026"},
+      {day:119,ref:"Deuteronômio 19–22",note:"Dia 119 — 27/08/2026"},
+      {day:120,ref:"Deuteronômio 23–26",note:"Dia 120 — 28/08/2026"},
+      {day:121,ref:"Deuteronômio 27–28",note:"Dia 121 — 29/08/2026"},
+      {day:122,ref:"Deuteronômio 29–31",note:"Dia 122 — 30/08/2026"},
+      {day:123,ref:"Deuteronômio 32–34",note:"Dia 123 — 31/08/2026"},
+      {day:124,ref:"Atos 1–2",note:"Dia 124 — 01/09/2026"},
+      {day:125,ref:"Josué 1–4",note:"Dia 125 — 02/09/2026"},
+      {day:126,ref:"Salmos 49–53",note:"Dia 126 — 03/09/2026"},
+      {day:127,ref:"Atos 3–5",note:"Dia 127 — 04/09/2026"},
+      {day:128,ref:"Josué 5–8",note:"Dia 128 — 05/09/2026"},
+      {day:129,ref:"Atos 6–7",note:"Dia 129 — 06/09/2026"},
+      {day:130,ref:"Josué 9–11",note:"Dia 130 — 07/09/2026"},
+      {day:131,ref:"Salmos 54–59",note:"Dia 131 — 08/09/2026"},
+      {day:132,ref:"Atos 8–9",note:"Dia 132 — 09/09/2026"},
+      {day:133,ref:"Josué 12–14",note:"Dia 133 — 10/09/2026"},
+      {day:134,ref:"Josué 15–16",note:"Dia 134 — 11/09/2026"},
+      {day:135,ref:"Atos 10–11",note:"Dia 135 — 12/09/2026"},
+      {day:136,ref:"Josué 17–19",note:"Dia 136 — 13/09/2026"},
+      {day:137,ref:"Atos 12–13",note:"Dia 137 — 14/09/2026"},
+      {day:138,ref:"Atos 14–16",note:"Dia 138 — 15/09/2026"},
+      {day:139,ref:"Josué 20–22",note:"Dia 139 — 16/09/2026"},
+      {day:140,ref:"Atos 17–19",note:"Dia 140 — 17/09/2026"},
+      {day:141,ref:"Salmos 60–66",note:"Dia 141 — 18/09/2026"},
+      {day:142,ref:"Atos 20–21",note:"Dia 142 — 19/09/2026"},
+      {day:143,ref:"Atos 22–24",note:"Dia 143 — 20/09/2026"},
+      {day:144,ref:"Josué 23–24",note:"Dia 144 — 21/09/2026"},
+      {day:145,ref:"Atos 25–28",note:"Dia 145 — 22/09/2026"},
+      {day:146,ref:"Salmos 67–69",note:"Dia 146 — 23/09/2026"},
+      {day:147,ref:"Juízes 1–3",note:"Dia 147 — 24/09/2026"},
+      {day:148,ref:"Romanos 1–3",note:"Dia 148 — 25/09/2026"},
+      {day:149,ref:"Juízes 4–6",note:"Dia 149 — 26/09/2026"},
+      {day:150,ref:"Juízes 7–9",note:"Dia 150 — 27/09/2026"},
+      {day:151,ref:"Romanos 4–7",note:"Dia 151 — 28/09/2026"},
+      {day:152,ref:"Juízes 10–12",note:"Dia 152 — 29/09/2026"},
+      {day:153,ref:"Romanos 8–9",note:"Dia 153 — 30/09/2026"},
+      {day:154,ref:"Salmos 70–73",note:"Dia 154 — 01/10/2026"},
+      {day:155,ref:"Juízes 13–16",note:"Dia 155 — 02/10/2026"},
+      {day:156,ref:"Romanos 10–12",note:"Dia 156 — 03/10/2026"},
+      {day:157,ref:"Juízes 17–19",note:"Dia 157 — 04/10/2026"},
+      {day:158,ref:"Romanos 13–16",note:"Dia 158 — 05/10/2026"},
+      {day:159,ref:"Juízes 20–21",note:"Dia 159 — 06/10/2026"},
+      {day:160,ref:"Salmos 74–78",note:"Dia 160 — 07/10/2026"},
+      {day:161,ref:"Rute 1–4",note:"Dia 161 — 08/10/2026"},
+      {day:162,ref:"Gálatas 1–3",note:"Dia 162 — 09/10/2026"},
+      {day:163,ref:"Gálatas 4–6",note:"Dia 163 — 10/10/2026"},
+      {day:164,ref:"1 Samuel 1–3",note:"Dia 164 — 11/10/2026"},
+      {day:165,ref:"Efésios 1–4",note:"Dia 165 — 12/10/2026"},
+      {day:166,ref:"Salmos 78–83",note:"Dia 166 — 13/10/2026"},
+      {day:167,ref:"1 Samuel 4–7",note:"Dia 167 — 14/10/2026"},
+      {day:168,ref:"1 Samuel 8–10",note:"Dia 168 — 15/10/2026"},
+      {day:169,ref:"Efésios 5–6",note:"Dia 169 — 16/10/2026"},
+      {day:170,ref:"1 Samuel 11–14",note:"Dia 170 — 17/10/2026"},
+      {day:171,ref:"1 Samuel 15–17",note:"Dia 171 — 18/10/2026"},
+      {day:172,ref:"Salmos 84–89",note:"Dia 172 — 19/10/2026"},
+      {day:173,ref:"1 Samuel 18–20",note:"Dia 173 — 20/10/2026"},
+      {day:174,ref:"1 Samuel 21–24",note:"Dia 174 — 21/10/2026"},
+      {day:175,ref:"1 Samuel 25–27",note:"Dia 175 — 22/10/2026"},
+      {day:176,ref:"Salmos 90–94",note:"Dia 176 — 23/10/2026"},
+      {day:177,ref:"1 Samuel 28–31",note:"Dia 177 — 24/10/2026"},
+      {day:178,ref:"Filipenses 1–4",note:"Dia 178 — 25/10/2026"},
+      {day:179,ref:"2 Samuel 1–3",note:"Dia 179 — 26/10/2026"},
+      {day:180,ref:"2 Samuel 4–7",note:"Dia 180 — 27/10/2026"},
+      {day:181,ref:"Salmos 95–102",note:"Dia 181 — 28/10/2026"},
+      {day:182,ref:"2 Samuel 8–11",note:"Dia 182 — 29/10/2026"},
+      {day:183,ref:"2 Samuel 12–14",note:"Dia 183 — 30/10/2026"},
+      {day:184,ref:"Salmos 103–105",note:"Dia 184 — 31/10/2026"},
+      {day:185,ref:"Salmos 106–107",note:"Dia 185 — 01/11/2026"},
+      {day:186,ref:"2 Samuel 15–17",note:"Dia 186 — 02/11/2026"},
+      {day:187,ref:"Salmos 108–113",note:"Dia 187 — 03/11/2026"},
+      {day:188,ref:"2 Samuel 18–19",note:"Dia 188 — 04/11/2026"},
+      {day:189,ref:"2 Samuel 20–22",note:"Dia 189 — 05/11/2026"},
+      {day:190,ref:"Salmos 114–118",note:"Dia 190 — 06/11/2026"},
+      {day:191,ref:"Salmos 119",note:"Dia 191 — 07/11/2026"},
+      {day:192,ref:"2 Samuel 23–24",note:"Dia 192 — 08/11/2026"},
+      {day:193,ref:"Tiago 1–5",note:"Dia 193 — 09/11/2026"},
+      {day:194,ref:"Salmos 120–130",note:"Dia 194 — 10/11/2026"},
+      {day:195,ref:"Provérbios 1–3",note:"Dia 195 — 11/11/2026"},
+      {day:196,ref:"1 Reis 1–2",note:"Dia 196 — 12/11/2026"},
+      {day:197,ref:"Salmos 131–136",note:"Dia 197 — 13/11/2026"},
+      {day:198,ref:"1 Reis 3–5",note:"Dia 198 — 14/11/2026"},
+      {day:199,ref:"1 Reis 6–7",note:"Dia 199 — 15/11/2026"},
+      {day:200,ref:"1 Reis 8–9",note:"Dia 200 — 16/11/2026"},
+      {day:201,ref:"Salmos 137–143",note:"Dia 201 — 17/11/2026"},
+      {day:202,ref:"Salmos 144–148",note:"Dia 202 — 18/11/2026"},
+      {day:203,ref:"Salmos 149–150",note:"Dia 203 — 19/11/2026"},
+      {day:204,ref:"1 Reis 10–11",note:"Dia 204 — 20/11/2026"},
+      {day:205,ref:"1 Reis 12–14",note:"Dia 205 — 21/11/2026"},
+      {day:206,ref:"1 Reis 15–17",note:"Dia 206 — 22/11/2026"},
+      {day:207,ref:"Provérbios 4–6",note:"Dia 207 — 23/11/2026"},
+      {day:208,ref:"Provérbios 7–9",note:"Dia 208 — 24/11/2026"},
+      {day:209,ref:"Provérbios 10–12",note:"Dia 209 — 25/11/2026"},
+      {day:210,ref:"1 Reis 18–20",note:"Dia 210 — 26/11/2026"},
+      {day:211,ref:"1 Reis 21–22",note:"Dia 211 — 27/11/2026"},
+      {day:212,ref:"Provérbios 13–15",note:"Dia 212 — 28/11/2026"},
+      {day:213,ref:"2 Reis 1–4",note:"Dia 213 — 29/11/2026"},
+      {day:214,ref:"2 Reis 5–7",note:"Dia 214 — 30/11/2026"},
+      {day:215,ref:"2 Reis 8–10",note:"Dia 215 — 01/12/2026"},
+      {day:216,ref:"Provérbios 16–18",note:"Dia 216 — 02/12/2026"},
+      {day:217,ref:"Provérbios 19–21",note:"Dia 217 — 03/12/2026"},
+      {day:218,ref:"Provérbios 22–24",note:"Dia 218 — 04/12/2026"},
+      {day:219,ref:"2 Reis 11–14",note:"Dia 219 — 05/12/2026"},
+      {day:220,ref:"2 Reis 15–17",note:"Dia 220 — 06/12/2026"},
+      {day:221,ref:"2 Reis 18–19",note:"Dia 221 — 07/12/2026"},
+      {day:222,ref:"Provérbios 25–27",note:"Dia 222 — 08/12/2026"},
+      {day:223,ref:"2 Reis 20–23",note:"Dia 223 — 09/12/2026"},
+      {day:224,ref:"Provérbios 28–31",note:"Dia 224 — 10/12/2026"},
+      {day:225,ref:"2 Reis 24–25",note:"Dia 225 — 11/12/2026"},
+      {day:226,ref:"1 Crônicas 1–2",note:"Dia 226 — 12/12/2026"},
+      {day:227,ref:"Eclesiastes 1–4",note:"Dia 227 — 13/12/2026"},
+      {day:228,ref:"1 Crônicas 3–5",note:"Dia 228 — 14/12/2026"},
+      {day:229,ref:"Eclesiastes 5–8",note:"Dia 229 — 15/12/2026"},
+      {day:230,ref:"1 Crônicas 6",note:"Dia 230 — 16/12/2026"},
+      {day:231,ref:"1 Crônicas 7–8",note:"Dia 231 — 17/12/2026"},
+      {day:232,ref:"Eclesiastes 9–12",note:"Dia 232 — 18/12/2026"},
+      {day:233,ref:"1 Crônicas 9–11",note:"Dia 233 — 19/12/2026"},
+      {day:234,ref:"1 Coríntios 1–4",note:"Dia 234 — 20/12/2026"},
+      {day:235,ref:"1 Coríntios 5–7",note:"Dia 235 — 21/12/2026"},
+      {day:236,ref:"1 Crônicas 12–15",note:"Dia 236 — 22/12/2026"},
+      {day:237,ref:"1 Crônicas 16–18",note:"Dia 237 — 23/12/2026"},
+      {day:238,ref:"1 Coríntios 8–10",note:"Dia 238 — 24/12/2026"},
+      {day:239,ref:"1 Coríntios 11–13",note:"Dia 239 — 25/12/2026"},
+      {day:240,ref:"1 Crônicas 19–22",note:"Dia 240 — 26/12/2026"},
+      {day:241,ref:"1 Crônicas 23–25",note:"Dia 241 — 27/12/2026"},
+      {day:242,ref:"1 Crônicas 26–29",note:"Dia 242 — 28/12/2026"},
+      {day:243,ref:"1 Coríntios 14–16",note:"Dia 243 — 29/12/2026"},
+      {day:244,ref:"2 Crônicas 1–4",note:"Dia 244 — 30/12/2026"},
+      {day:245,ref:"2 Crônicas 5–7",note:"Dia 245 — 31/12/2026"},
+      {day:246,ref:"2 Coríntios 1–4",note:"Dia 246 — 01/01/2027"},
+      {day:247,ref:"2 Crônicas 8–11",note:"Dia 247 — 02/01/2027"},
+      {day:248,ref:"2 Coríntios 5–8",note:"Dia 248 — 03/01/2027"},
+      {day:249,ref:"2 Coríntios 9–13",note:"Dia 249 — 04/01/2027"},
+      {day:250,ref:"2 Crônicas 12–15",note:"Dia 250 — 05/01/2027"},
+      {day:251,ref:"1 Pedro 1–3",note:"Dia 251 — 06/01/2027"},
+      {day:252,ref:"2 Crônicas 16–19",note:"Dia 252 — 07/01/2027"},
+      {day:253,ref:"2 Crônicas 20–23",note:"Dia 253 — 08/01/2027"},
+      {day:254,ref:"1 Pedro 4–5",note:"Dia 254 — 09/01/2027"},
+      {day:255,ref:"2 Crônicas 24–26",note:"Dia 255 — 10/01/2027"},
+      {day:256,ref:"2 Crônicas 27–29",note:"Dia 256 — 11/01/2027"},
+      {day:257,ref:"2 Pedro 1–3",note:"Dia 257 — 12/01/2027"},
+      {day:258,ref:"2 Crônicas 30–32",note:"Dia 258 — 13/01/2027"},
+      {day:259,ref:"2 Crônicas 33–36",note:"Dia 259 — 14/01/2027"},
+      {day:260,ref:"Esdras 1–2",note:"Dia 260 — 15/01/2027"},
+      {day:261,ref:"Esdras 3–6",note:"Dia 261 — 16/01/2027"},
+      {day:262,ref:"Esdras 7–10",note:"Dia 262 — 17/01/2027"},
+      {day:263,ref:"Neemias 1–4",note:"Dia 263 — 18/01/2027"},
+      {day:264,ref:"Neemias 5–7",note:"Dia 264 — 19/01/2027"},
+      {day:265,ref:"Neemias 8–10",note:"Dia 265 — 20/01/2027"},
+      {day:266,ref:"Neemias 11–13",note:"Dia 266 — 21/01/2027"},
+      {day:267,ref:"Ester 1–4",note:"Dia 267 — 22/01/2027"},
+      {day:268,ref:"Ester 5–10",note:"Dia 268 — 23/01/2027"},
+      {day:269,ref:"Jó 1–2",note:"Dia 269 — 24/01/2027"},
+      {day:270,ref:"1 João 1–5",note:"Dia 270 — 25/01/2027"},
+      {day:271,ref:"Jó 3–5",note:"Dia 271 — 26/01/2027"},
+      {day:272,ref:"Jó 6–8",note:"Dia 272 — 27/01/2027"},
+      {day:273,ref:"2 João 1",note:"Dia 273 — 28/01/2027"},
+      {day:274,ref:"Jó 9–11",note:"Dia 274 — 29/01/2027"},
+      {day:275,ref:"Jó 12–15",note:"Dia 275 — 30/01/2027"},
+      {day:276,ref:"3 João 1",note:"Dia 276 — 31/01/2027"},
+      {day:277,ref:"Jó 16–20",note:"Dia 277 — 01/02/2027"},
+      {day:278,ref:"Jó 21–25",note:"Dia 278 — 02/02/2027"},
+      {day:279,ref:"Judas 1",note:"Dia 279 — 03/02/2027"},
+      {day:280,ref:"Jó 26–28",note:"Dia 280 — 04/02/2027"},
+      {day:281,ref:"Jó 29–31",note:"Dia 281 — 05/02/2027"},
+      {day:282,ref:"Jó 32–34",note:"Dia 282 — 06/02/2027"},
+      {day:283,ref:"Jó 35–37",note:"Dia 283 — 07/02/2027"},
+      {day:284,ref:"Jó 38–40",note:"Dia 284 — 08/02/2027"},
+      {day:285,ref:"Jó 41–42",note:"Dia 285 — 09/02/2027"},
+      {day:286,ref:"Cânticos 1–5",note:"Dia 286 — 10/02/2027"},
+      {day:287,ref:"Cânticos 6–8",note:"Dia 287 — 11/02/2027"},
+      {day:288,ref:"Isaías 1–3",note:"Dia 288 — 12/02/2027"},
+      {day:289,ref:"Isaías 4–7",note:"Dia 289 — 13/02/2027"},
+      {day:290,ref:"Isaías 8–10",note:"Dia 290 — 14/02/2027"},
+      {day:291,ref:"Daniel 1–3",note:"Dia 291 — 15/02/2027"},
+      {day:292,ref:"Isaías 11–14",note:"Dia 292 — 16/02/2027"},
+      {day:293,ref:"Isaías 15–20",note:"Dia 293 — 17/02/2027"},
+      {day:294,ref:"Isaías 21–24",note:"Dia 294 — 18/02/2027"},
+      {day:295,ref:"Daniel 4–6",note:"Dia 295 — 19/02/2027"},
+      {day:296,ref:"Isaías 25–28",note:"Dia 296 — 20/02/2027"},
+      {day:297,ref:"Isaías 29–32",note:"Dia 297 — 21/02/2027"},
+      {day:298,ref:"Daniel 7–9",note:"Dia 298 — 22/02/2027"},
+      {day:299,ref:"Isaías 33–36",note:"Dia 299 — 23/02/2027"},
+      {day:300,ref:"Isaías 37–40",note:"Dia 300 — 24/02/2027"},
+      {day:301,ref:"Daniel 10–12",note:"Dia 301 — 25/02/2027"},
+      {day:302,ref:"Apocalipse 1–4",note:"Dia 302 — 26/02/2027"},
+      {day:303,ref:"Isaías 41–43",note:"Dia 303 — 27/02/2027"},
+      {day:304,ref:"Isaías 44–47",note:"Dia 304 — 28/02/2027"},
+      {day:305,ref:"Isaías 48–51",note:"Dia 305 — 01/03/2027"},
+      {day:306,ref:"Isaías 52–57",note:"Dia 306 — 02/03/2027"},
+      {day:307,ref:"Isaías 58–62",note:"Dia 307 — 03/03/2027"},
+      {day:308,ref:"Apocalipse 5–9",note:"Dia 308 — 04/03/2027"},
+      {day:309,ref:"Isaías 63–66",note:"Dia 309 — 05/03/2027"},
+      {day:310,ref:"Apocalipse 10–14",note:"Dia 310 — 06/03/2027"},
+      {day:311,ref:"Jeremias 1–3",note:"Dia 311 — 07/03/2027"},
+      {day:312,ref:"Jeremias 4–6",note:"Dia 312 — 08/03/2027"},
+      {day:313,ref:"Jeremias 7–9",note:"Dia 313 — 09/03/2027"},
+      {day:314,ref:"Apocalipse 15–19",note:"Dia 314 — 10/03/2027"},
+      {day:315,ref:"Jeremias 10–13",note:"Dia 315 — 11/03/2027"},
+      {day:316,ref:"Jeremias 14–17",note:"Dia 316 — 12/03/2027"},
+      {day:317,ref:"Jeremias 18–22",note:"Dia 317 — 13/03/2027"},
+      {day:318,ref:"Apocalipse 20–22",note:"Dia 318 — 14/03/2027"},
+      {day:319,ref:"Jeremias 23–25",note:"Dia 319 — 15/03/2027"},
+      {day:320,ref:"Jeremias 26–29",note:"Dia 320 — 16/03/2027"},
+      {day:321,ref:"1 Timóteo 1–6",note:"Dia 321 — 17/03/2027"},
+      {day:322,ref:"Jeremias 30–32",note:"Dia 322 — 18/03/2027"},
+      {day:323,ref:"Jeremias 33–36",note:"Dia 323 — 19/03/2027"},
+      {day:324,ref:"Jeremias 37–40",note:"Dia 324 — 20/03/2027"},
+      {day:325,ref:"2 Timóteo 1–4",note:"Dia 325 — 21/03/2027"},
+      {day:326,ref:"Jeremias 41–44",note:"Dia 326 — 22/03/2027"},
+      {day:327,ref:"Jeremias 45–48",note:"Dia 327 — 23/03/2027"},
+      {day:328,ref:"Jeremias 49–50",note:"Dia 328 — 24/03/2027"},
+      {day:329,ref:"Tito 1–3",note:"Dia 329 — 25/03/2027"},
+      {day:330,ref:"Jeremias 51–52",note:"Dia 330 — 26/03/2027"},
+      {day:331,ref:"Lamentações 1–3",note:"Dia 331 — 27/03/2027"},
+      {day:332,ref:"Lamentações 4–5",note:"Dia 332 — 28/03/2027"},
+      {day:333,ref:"Ezequiel 1–4",note:"Dia 333 — 29/03/2027"},
+      {day:334,ref:"Ezequiel 5–8",note:"Dia 334 — 30/03/2027"},
+      {day:335,ref:"Ezequiel 9–12",note:"Dia 335 — 31/03/2027"},
+      {day:336,ref:"Colossenses 1–4",note:"Dia 336 — 01/04/2027"},
+      {day:337,ref:"Ageu 1–2",note:"Dia 337 — 02/04/2027"},
+      {day:338,ref:"Habacuque 1–3",note:"Dia 338 — 03/04/2027"},
+      {day:339,ref:"Jonas 1–4",note:"Dia 339 — 04/04/2027"},
+      {day:340,ref:"Ezequiel 13–16",note:"Dia 340 — 05/04/2027"},
+      {day:341,ref:"Ezequiel 17–20",note:"Dia 341 — 06/04/2027"},
+      {day:342,ref:"Ezequiel 21–23",note:"Dia 342 — 07/04/2027"},
+      {day:343,ref:"Sofonias 1–3",note:"Dia 343 — 08/04/2027"},
+      {day:344,ref:"Naum 1–3",note:"Dia 344 — 09/04/2027"},
+      {day:345,ref:"Obadias 1",note:"Dia 345 — 10/04/2027"},
+      {day:346,ref:"Ezequiel 24–27",note:"Dia 346 — 11/04/2027"},
+      {day:347,ref:"Ezequiel 28–30",note:"Dia 347 — 12/04/2027"},
+      {day:348,ref:"Ezequiel 31–33",note:"Dia 348 — 13/04/2027"},
+      {day:349,ref:"Ezequiel 34–36",note:"Dia 349 — 14/04/2027"},
+      {day:350,ref:"Amós 1–5",note:"Dia 350 — 15/04/2027"},
+      {day:351,ref:"Amós 6–9",note:"Dia 351 — 16/04/2027"},
+      {day:352,ref:"Ezequiel 37–39",note:"Dia 352 — 17/04/2027"},
+      {day:353,ref:"Ezequiel 40–42",note:"Dia 353 — 18/04/2027"},
+      {day:354,ref:"Joel 1–3",note:"Dia 354 — 19/04/2027"},
+      {day:355,ref:"Oséias 1–5",note:"Dia 355 — 20/04/2027"},
+      {day:356,ref:"Ezequiel 43–45",note:"Dia 356 — 21/04/2027"},
+      {day:357,ref:"Oséias 6–10",note:"Dia 357 — 22/04/2027"},
+      {day:358,ref:"Ezequiel 46–48",note:"Dia 358 — 23/04/2027"},
+      {day:359,ref:"Oséias 11–14",note:"Dia 359 — 24/04/2027"},
+      {day:360,ref:"Miquéias 1–7",note:"Dia 360 — 25/04/2027"},
+      {day:361,ref:"Zacarias 1–6",note:"Dia 361 — 26/04/2027"},
+      {day:362,ref:"Zacarias 7–14",note:"Dia 362 — 27/04/2027"},
+      {day:363,ref:"1 Tessalonicenses 1–5",note:"Dia 363 — 28/04/2027"},
+      {day:364,ref:"Filemom 1",note:"Dia 364 — 29/04/2027"},
+      {day:365,ref:"2 Tessalonicenses 1–3",note:"Dia 365 — 30/04/2027"},
+    ]},
+  ]},
+];
+
+// Flatten to array[0..364]
+const PLAN = [];
+PLAN_FULL.forEach(ph => ph.weeks.forEach(wk => wk.days.forEach(d => {
+  const chaps = d.ref.split(/[+,]/).map(s=>s.trim()).filter(Boolean);
+  PLAN[d.day-1] = { day:d.day, ref:d.ref, note:d.note, chaps, phase:ph.phaseTitle, phaseColor:ph.color, week:wk.title, weekSub:wk.subtitle };
+})));
+
+const TOTAL_CHAPS = 1199;
+
+const VERSES = [
+  {text:'A tua palavra é lâmpada para os meus pés e luz para o meu caminho.',ref:'Salmos 119:105'},
+  {text:'Bem-aventurado aquele que lê e os que ouvem as palavras desta profecia.',ref:'Apocalipse 1:3'},
+  {text:'No princípio era o Verbo, e o Verbo estava com Deus, e o Verbo era Deus.',ref:'João 1:1'},
+  {text:'Toda a Escritura é divinamente inspirada e proveitosa para ensinar.',ref:'2 Timóteo 3:16'},
+  {text:'Guarda no coração o mandamento de teu pai e não abandones o ensino de tua mãe.',ref:'Provérbios 6:20'},
+  {text:'Mas a palavra do Senhor permanece para sempre.',ref:'1 Pedro 1:25'},
+  {text:'Sede, porém, praticantes da palavra e não somente ouvintes.',ref:'Tiago 1:22'},
+  {text:'A palavra de Deus é viva e eficaz e mais cortante do que qualquer espada.',ref:'Hebreus 4:12'},
+  {text:'Meditarei nos teus preceitos e contemplo os teus caminhos.',ref:'Salmos 119:15'},
+  {text:'Examina as Escrituras, porque julgais ter nelas a vida eterna.',ref:'João 5:39'},
+  {text:'Não se afaste da tua boca o livro desta lei; medita nele dia e noite.',ref:'Josué 1:8'},
+  {text:'Quão doces são as tuas palavras ao meu paladar! Mais do que o mel à minha boca.',ref:'Salmos 119:103'},
+  {text:'Cristo em vós, esperança da glória.',ref:'Colossenses 1:27'},
+  {text:'Renovai-vos no espírito da vossa mente.',ref:'Efésios 4:23'},
+];
+
+const PRAYERS_BEFORE = [
+  'Senhor, abre os olhos do meu entendimento para ver maravilhas na Tua lei. Fala ao meu coração hoje.',
+  'Pai, prepara meu coração para receber Tua Palavra como terra boa. Que ela germine e frutifique.',
+  'Espírito Santo, sê meu mestre nesta leitura. Ilumina cada versículo com Tua sabedoria.',
+  'Senhor, afasta distrações e que minha mente esteja só em Ti neste momento sagrado.',
+  'Deus, faço desta leitura um ato de adoração. Recebe meu tempo como oferta ao Teu nome.',
+  'Pai, que Tua Palavra penetre até os pensamentos e intenções do meu coração hoje.',
+  'Senhor, que eu não leia apenas com os olhos, mas que Tua Palavra transforme minha vida.',
+];
+
+const PRAYERS_AFTER = [
+  'Obrigado, Senhor, por mais um encontro com Tua Palavra. Que ela permaneça comigo ao longo do dia.',
+  'Pai, sele em mim o que aprendi. Que eu leve esta verdade para cada decisão de hoje.',
+  'Senhor, faz que o que li não seja esquecido, mas que se torne fruto em minha vida.',
+  'Obrigado por Tua Palavra fiel. Ajuda-me a ser fazedor e não apenas ouvinte.',
+  'Que a paz que Tua Palavra traz esteja comigo durante todas as horas deste dia.',
+  'Senhor, glorifico Teu nome por cada promessa lida. Confio em cada uma delas.',
+  'Pai, que a minha leitura de hoje se reflita em amor ao próximo e obediência a Ti.',
+];
+
+/* ════════ STORAGE ════════ */
+const SK = { CHAPS:'pviva_chaps', NOTES:'pviva_notes', START:'pviva_start', THEME:'pviva_theme', STREAK:'pviva_streak', REMINDER:'pviva_reminder' };
+
+let dailyChaps = {}, dailyNotes = {}, startDate = null, theme = 'dark';
+let streakData = { count:0, lastDate:null };
+let reminderConfig = { time:'', days:[] };
+
+function loadState() {
+  try { dailyChaps = JSON.parse(localStorage.getItem(SK.CHAPS)||'{}'); } catch { dailyChaps={}; }
+  try { dailyNotes = JSON.parse(localStorage.getItem(SK.NOTES)||'{}'); } catch { dailyNotes={}; }
+  try { streakData = JSON.parse(localStorage.getItem(SK.STREAK)||'{"count":0,"lastDate":null}'); } catch { streakData={count:0,lastDate:null}; }
+  try { reminderConfig = JSON.parse(localStorage.getItem(SK.REMINDER)||'{"time":"","days":[]}'); } catch { reminderConfig={time:'',days:[]}; }
+  startDate = localStorage.getItem(SK.START)||null;
+  theme = localStorage.getItem(SK.THEME)||'dark';
+}
+
+function saveState() {
+  localStorage.setItem(SK.CHAPS, JSON.stringify(dailyChaps));
+  localStorage.setItem(SK.NOTES, JSON.stringify(dailyNotes));
+}
+
+/* ════════ DATE HELPERS ════════ */
+function todayStr() {
+  const d=new Date(); return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;
+}
+function p2(n){return String(n).padStart(2,'0')}
+function addDays(ds,n){const d=new Date(ds+'T00:00:00');d.setDate(d.getDate()+n);return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`}
+function daysBetween(a,b){return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000)}
+function formatDate(ds){const[y,m,d]=ds.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}
+function formatDateShort(ds){const[y,m,d]=ds.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('pt-BR',{day:'numeric',month:'short'})}
+
+/* ════════ PROGRESS ════════ */
+function countDoneChaps() {
+  let n=0;
+  Object.values(dailyChaps).forEach(arr=>{ if(Array.isArray(arr)) arr.forEach(v=>{ if(v) n++; }); });
+  return n;
+}
+
+function getDayDoneCount(dayNum) {
+  const arr = dailyChaps[dayNum];
+  if(!Array.isArray(arr)) return 0;
+  return arr.filter(Boolean).length;
+}
+
+function getDayStatus(dayNum) {
+  const d = PLAN[dayNum-1];
+  if(!d) return 'future';
+  const total = d.chaps.length;
+  const done = getDayDoneCount(dayNum);
+  if(done === total) return 'done';
+  if(done > 0) return 'partial';
+  return 'none';
+}
+
+function getDateDayNum(dateStr) {
+  if(!startDate) return null;
+  const idx = daysBetween(startDate, dateStr);
+  if(idx < 0 || idx >= 365) return null;
+  return idx+1;
+}
+
+function renderProgress() {
+  const done = countDoneChaps();
+  const pct = Math.round((done/TOTAL_CHAPS)*100);
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-val').textContent = pct+'%';
+  document.getElementById('prog-chaps').textContent = done;
+  document.getElementById('prog-lbl-l').textContent = `${done} capítulos lidos`;
+  document.getElementById('prog-lbl-r').textContent = `${done} / ${TOTAL_CHAPS}`;
+}
+
+/* ════════ STREAK ════════ */
+function calcStreak() {
+  if(!startDate) return 0;
+  const today = todayStr();
+  let streak = 0;
+  let checkDate = today;
+
+  for(let i = 0; i < 365; i++) {
+    const dayNum = daysBetween(startDate, checkDate) + 1;
+    if(dayNum < 1 || dayNum > 365) break;
+    const done = getDayDoneCount(dayNum);
+    if(done > 0) {
+      streak++;
+      checkDate = addDays(checkDate, -1);
+    } else {
+      // Allow today to not count yet (still in progress)
+      if(i === 0) {
+        checkDate = addDays(checkDate, -1);
+      } else {
+        break;
+      }
+    }
+  }
+  return streak;
+}
+
+function renderStreak() {
+  const s = calcStreak();
+  const el = document.getElementById('streak-badge');
+  const num = document.getElementById('streak-num');
+  num.textContent = s;
+  el.classList.toggle('active', s > 0);
+}
+
+/* ════════ HAPTIC ════════ */
+function haptic(pattern) {
+  if(navigator.vibrate) navigator.vibrate(pattern);
+}
+
+/* ════════ PLAN PAGE ════════ */
+let planFilter = 'all';
+const openWeeks = {};
+
+function setPF(f) {
+  planFilter = f;
+  ['all','pending','done','partial'].forEach(id => {
+    const el = document.getElementById('pf-'+id);
+    if(el) el.classList.toggle('active', id===f);
+  });
+  renderPlan();
+}
+
+function renderPlan(scrollToToday) {
+  const today = todayStr();
+  const query = (document.getElementById('plan-search')?.value||'').toLowerCase().trim();
+  const todayDayNum = startDate ? Math.min(Math.max(daysBetween(startDate,today)+1,1),365) : null;
+
+  // Verse of the day
+  const vIdx = todayDayNum ? ((todayDayNum-1) % VERSES.length) : 0;
+  document.getElementById('verse-txt').textContent = VERSES[vIdx].text;
+  document.getElementById('verse-ref').textContent = '— '+VERSES[vIdx].ref;
+
+  // Auto-open week containing today
+  if(startDate && todayDayNum) {
+    PLAN_FULL.forEach(ph => ph.weeks.forEach(wk => {
+      const hasToday = wk.days.some(d => d.day === todayDayNum);
+      if(hasToday && openWeeks[wk.week] === undefined) openWeeks[wk.week] = true;
+    }));
+  }
+
+  let html = '';
+  let any = false;
+  let todayRowId = null;
+
+  PLAN_FULL.forEach(ph => {
+    let phHtml = '';
+    ph.weeks.forEach(wk => {
+      const wkKey = wk.week;
+      const wkDays = wk.days.map(d=>d.day);
+
+      const filtered = wkDays.filter(dayNum => {
+        const d = PLAN[dayNum-1];
+        const status = getDayStatus(dayNum);
+        const dateKey = startDate ? addDays(startDate, dayNum-1) : null;
+        const matchQ = !query || d.ref.toLowerCase().includes(query) || d.note.toLowerCase().includes(query) || ('dia '+dayNum).includes(query) || wk.title.toLowerCase().includes(query);
+        if(!matchQ) return false;
+        if(planFilter==='pending') return status!=='done' && dateKey && dateKey<=today;
+        if(planFilter==='done')    return status==='done';
+        if(planFilter==='partial') return status==='partial';
+        return true;
+      });
+      if(!filtered.length) return;
+      any = true;
+
+      const doneCount = wkDays.filter(dn=>getDayStatus(dn)==='done').length;
+      const allDone = doneCount===wkDays.length;
+      const isOpen = openWeeks[wkKey]!==false;
+
+      phHtml += `<div class="week-group">
+        <div class="week-hdr${isOpen?'':' closed'}" onclick="toggleWeek(${wkKey})">
+          <div style="flex:1;min-width:0">
+            <div class="week-title">${wk.title}</div>
+            <div class="week-sub">${wk.subtitle}</div>
+          </div>
+          <span class="week-badge${allDone?' done':''}">${doneCount}/${wkDays.length}</span>
+          <span class="week-chevron${isOpen?' open':''}">▼</span>
+        </div>`;
+
+      if(isOpen) {
+        phHtml += `<div class="week-body">`;
+        filtered.forEach((dayNum, idx) => {
+          const d = PLAN[dayNum-1];
+          const status = getDayStatus(dayNum);
+          const dateKey = startDate ? addDays(startDate, dayNum-1) : null;
+          const isToday = dateKey && dateKey===today;
+          const done = status==='done', partial = status==='partial';
+          const note = dailyNotes[dayNum]||'';
+          const rowId = isToday ? 'today-day-row' : '';
+          if(isToday) todayRowId = 'today-day-row';
+          // Staggered animation delay
+          const delay = idx * 40;
+          phHtml += `<div class="day-row${done?' done':''}${partial?' partial':''}${isToday?' today-row':''}" 
+            id="${rowId}"
+            style="animation-delay:${delay}ms"
+            onclick="openDayModal(${dayNum})">
+            <div class="day-check">${done?'✓':partial?'◑':''}</div>
+            <div class="day-info">
+              <div class="day-num">Dia ${dayNum}${isToday?' · <span class="today-badge">HOJE</span>':''}</div>
+              <div class="day-ref">${d.ref}</div>
+              <div class="day-note-txt">${d.note}</div>
+              ${note?`<div class="day-ann">✏ ${note}</div>`:''}
+            </div>
+            <div class="day-arrow">›</div>
+          </div>`;
+        });
+        phHtml += `</div>`;
+      }
+      phHtml += `</div>`;
+    });
+
+    if(!phHtml) return;
+    html += `<div class="phase-hdr" style="background:linear-gradient(135deg,${ph.color}16,${ph.color}06);border:1px solid ${ph.color}28">
+      <div class="phase-dot" style="background:${ph.color}"></div>
+      <div><div class="phase-name" style="color:${ph.color}">${ph.phase}</div><div class="phase-title">${ph.phaseTitle}</div></div>
+    </div>`;
+    html += phHtml;
+    html += `<div style="height:6px"></div>`;
+  });
+
+  if(!any) html='<div class="empty-state"><span class="icon">🔍</span>Nenhum resultado encontrado.</div>';
+  document.getElementById('plan-content').innerHTML = html;
+
+  // Scroll to today
+  if(scrollToToday || scrollToToday === undefined) {
+    setTimeout(() => {
+      const el = document.getElementById('today-day-row');
+      if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 150);
+  }
+}
+
+function toggleWeek(wk) {
+  openWeeks[wk] = openWeeks[wk]===false ? true : false;
+  renderPlan(false);
+}
+
+/* ════════ DAY MODAL ════════ */
+let editingDay = null;
+let editChaps = [];
+
+function openDayModal(dayNum) {
+  editingDay = dayNum;
+  const d = PLAN[dayNum-1];
+  const stored = dailyChaps[dayNum];
+  editChaps = d.chaps.map((_,i) => stored && stored[i] === true);
+
+  document.getElementById('dm-phase').textContent = `${d.phase} · ${d.week}`;
+  document.getElementById('dm-title').textContent = `Dia ${dayNum}`;
+  document.getElementById('dm-ref').textContent = d.ref;
+  document.getElementById('dm-note').textContent = d.note;
+  document.getElementById('dm-notes').value = dailyNotes[dayNum]||'';
+
+  // Prayers
+  const pBefore = PRAYERS_BEFORE[(dayNum-1) % PRAYERS_BEFORE.length];
+  const pAfter = PRAYERS_AFTER[(dayNum-1) % PRAYERS_AFTER.length];
+  document.getElementById('prayer-before-body').textContent = pBefore;
+  document.getElementById('prayer-after-body').textContent = pAfter;
+
+  renderModalChaps();
+  openModal('day-modal');
+}
+
+function togglePrayer(which) {
+  const body = document.getElementById(`prayer-${which}-body`);
+  const chev = document.getElementById(`prayer-${which}-chev`);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+function toggleMarkAll() {
+  const allDone = editChaps.every(Boolean);
+  editChaps = editChaps.map(() => !allDone);
+  haptic(8);
+  renderModalChaps();
+}
+
+function renderModalChaps() {
+  const d = PLAN[editingDay-1];
+  const allDone = editChaps.every(Boolean);
+  const btn = document.getElementById('mark-all-btn');
+  if(btn) {
+    btn.textContent = allDone ? 'Desmarcar todos ✗' : 'Marcar todos ✓';
+    btn.classList.toggle('unmark', allDone);
+  }
+
+  let html = '';
+  d.chaps.forEach((ch,i) => {
+    const done = editChaps[i];
+    html += `<div class="chap-item${done?' done':''}" onclick="toggleChap(${i})">
+      <div class="chap-ck">${done?'✓':''}</div>
+      <div class="chap-lbl">${ch}</div>
+      <div class="chap-n">${i+1}/${d.chaps.length}</div>
+    </div>`;
+  });
+  document.getElementById('dm-chaps').innerHTML = html;
+  updateModalStatus();
+}
+
+function toggleChap(i) {
+  editChaps[i] = !editChaps[i];
+  haptic(8);
+  renderModalChaps();
+}
+
+function updateModalStatus() {
+  const done = editChaps.filter(Boolean).length;
+  const total = editChaps.length;
+  const bar = document.getElementById('dm-status');
+  let color,icon,msg;
+  if(done===0)      { color='var(--red)';   icon='✗'; msg='Nenhum capítulo marcado'; }
+  else if(done<total){ color='var(--amber)'; icon='◑'; msg=`${done} de ${total} capítulos lidos`; }
+  else               { color='var(--green)'; icon='✓'; msg=`Todos os ${total} capítulos lidos!`; }
+  bar.style.background = done===total?'var(--greenL)':done>0?'var(--amberL)':'var(--redL)';
+  bar.style.borderColor = done===total?'rgba(76,175,125,.25)':done>0?'rgba(240,160,58,.25)':'rgba(224,92,92,.25)';
+  bar.innerHTML = `<span style="color:${color};font-size:1rem">${icon}</span><span style="color:${color}">${msg}</span><span style="margin-left:auto;color:var(--tx3);font-size:.7rem;font-weight:600">${done}/${total}</span>`;
+}
+
+function saveDayModal() {
+  if(!editingDay) return;
+  const prevDone = getDayDoneCount(editingDay);
+  const total = PLAN[editingDay-1].chaps.length;
+
+  dailyChaps[editingDay] = [...editChaps];
+  const n = document.getElementById('dm-notes').value.trim();
+  if(n) dailyNotes[editingDay] = n; else delete dailyNotes[editingDay];
+  saveState();
+  closeModal('day-modal');
+
+  const done = editChaps.filter(Boolean).length;
+  const justCompleted = done === total && prevDone < total;
+
+  if(justCompleted) {
+    haptic([12,30,12]);
+    celebrateDay(editingDay);
+  } else {
+    const msg = done===total ? `✓ Dia ${editingDay} concluído! 🎉` : done>0 ? `◑ ${done}/${total} capítulos salvos` : `✗ Dia ${editingDay} marcado como não lido`;
+    toast(msg);
+  }
+
+  renderProgress();
+  renderStreak();
+  const active = document.querySelector('.page.active');
+  if(active?.id==='page-plan') renderPlan(false);
+  if(active?.id==='page-cal') renderCalendar();
+}
+
+/* ════════ CELEBRATION ════════ */
+const CELEBRATION_MSGS = [
+  '🌟 Incrível! Mais um dia concluído!',
+  '🔥 Você está em chamas! Continue assim!',
+  '✨ Que vitória! A Palavra transforma!',
+  '🎉 Parabéns! Fidelidade diária é poderosa!',
+  '💛 Mais um passo na jornada com Deus!',
+  '🌿 Bem-aventurado quem medita na Lei!',
+];
+
+function celebrateDay(dayNum) {
+  const msg = CELEBRATION_MSGS[(dayNum-1) % CELEBRATION_MSGS.length];
+  toast(msg, true);
+  launchConfetti();
+  playCelebrationSound();
+}
+
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#e8b86d','#f5d08a','#4caf7d','#a78bfa','#f0a03a','#ffffff'];
+  const particles = Array.from({length:80}, () => ({
+    x: Math.random() * canvas.width,
+    y: -10 - Math.random() * 100,
+    r: 4 + Math.random() * 5,
+    d: 1.5 + Math.random() * 2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    vx: (Math.random() - 0.5) * 3,
+    spin: (Math.random() - 0.5) * 0.2,
+    angle: Math.random() * Math.PI * 2,
+    shape: Math.random() > 0.5 ? 'rect' : 'circle',
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.max(0, 1 - frame/120);
+      if(p.shape === 'rect') {
+        ctx.fillRect(-p.r/2, -p.r/4, p.r, p.r/2);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r/2, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+      p.y += p.d;
+      p.x += p.vx;
+      p.angle += p.spin;
+    });
+    frame++;
+    if(frame < 130) requestAnimationFrame(draw);
+    else { canvas.style.display = 'none'; ctx.clearRect(0,0,canvas.width,canvas.height); }
+  }
+  draw();
+}
+
+function playCelebrationSound() {
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    notes.forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain); gain.connect(ac.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      const t = ac.currentTime + i * 0.07;
+      gain.gain.setValueAtTime(0.15, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      osc.start(t); osc.stop(t + 0.2);
+    });
+  } catch(e) {}
+}
+
+/* ════════ CALENDAR ════════ */
+let calYear, calMonth;
+let logAll = false;
+
+function renderCalendar() {
+  const today = new Date();
+  if(calYear===undefined){ calYear=today.getFullYear(); calMonth=today.getMonth(); }
+  const names=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-month').textContent = `${names[calMonth]} ${calYear}`;
+
+  const firstDay = new Date(calYear,calMonth,1).getDay();
+  const daysInMonth = new Date(calYear,calMonth+1,0).getDate();
+  const todayS = todayStr();
+
+  let html='';
+  for(let i=0;i<firstDay;i++) html+='<div class="cal-day empty"></div>';
+  for(let day=1;day<=daysInMonth;day++){
+    const ds = `${calYear}-${p2(calMonth+1)}-${p2(day)}`;
+    const dayNum = getDateDayNum(ds);
+    const isToday = ds===todayS;
+    const isFuture = ds>todayS;
+    let cls = 'cal-day';
+    if(isToday) cls+=' today-cal';
+    else if(isFuture) cls+=' future';
+    else if(dayNum){
+      const st = getDayStatus(dayNum);
+      if(st==='done') cls+=' done';
+      else if(st==='partial') cls+=' partial';
+      else if(startDate && ds>=startDate) cls+=' missed';
+    }
+    const clickable = !isFuture && dayNum;
+    html+=`<div class="${cls}"${clickable?` onclick="openDayModal(${dayNum})" title="Dia ${dayNum}"`:''}>${day}</div>`;
+  }
+  document.getElementById('cal-days').innerHTML = html;
+  renderLogList();
+}
+
+function calPrev(){ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+function calNext(){ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
+
+function toggleLogFilter() {
+  logAll = !logAll;
+  const btn = document.getElementById('log-filter-btn');
+  btn.textContent = logAll ? 'Todos' : 'Recentes';
+  renderLogList();
+}
+
+function renderLogList() {
+  if(!startDate){
+    document.getElementById('log-list').innerHTML='<div class="empty-state"><span class="icon">📅</span>Configure a data de início nas Configurações.</div>';
+    return;
+  }
+  const today = todayStr();
+  const elapsed = Math.max(0, daysBetween(startDate, today));
+  const limit = logAll ? elapsed+1 : Math.min(14, elapsed+1);
+
+  const entries = [];
+  for(let i=elapsed;i>=Math.max(0,elapsed-limit+1);i--){
+    const dayNum = i+1;
+    if(dayNum > 365) continue;
+    const dateKey = addDays(startDate, i);
+    const status = getDayStatus(dayNum);
+    if(status==='none' && !logAll) continue;
+    entries.push({dayNum, dateKey, status});
+  }
+
+  if(!entries.length){
+    document.getElementById('log-list').innerHTML='<div class="empty-state"><span class="icon">🌱</span>Nenhum dia registrado ainda.</div>';
+    return;
+  }
+
+  let html='';
+  entries.forEach(({dayNum,dateKey,status}) => {
+    const d = PLAN[dayNum-1];
+    const note = dailyNotes[dayNum]||'';
+    const done = getDayDoneCount(dayNum);
+    const total = d.chaps.length;
+    const sColor = status==='done'?'var(--green)':status==='partial'?'var(--amber)':'var(--red)';
+    const sIcon = status==='done'?'✓':status==='partial'?`${done}/${total}`:'✗';
+    html+=`<div class="log-entry" onclick="openDayModal(${dayNum})">
+      <div class="log-status" style="background:${sColor}20;border:1px solid ${sColor}40;color:${sColor}">${sIcon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.68rem;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em">Dia ${dayNum} · ${formatDateShort(dateKey)}</div>
+        <div style="font-size:.87rem;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.ref}</div>
+        ${note?`<div style="font-size:.7rem;color:var(--tx3);margin-top:2px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">✏ ${note}</div>`:''}
+      </div>
+      <div style="font-size:10px;color:var(--tx3)">›</div>
+    </div>`;
+  });
+  document.getElementById('log-list').innerHTML = html;
+}
+
+/* ════════ NAV ════════ */
+let curPage = 'plan';
+function goPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const nb = document.getElementById('nav-'+id);
+  if(nb) nb.classList.add('active');
+  curPage = id;
+  window.scrollTo(0,0);
+  if(id==='plan') renderPlan(true);
+  if(id==='cal') renderCalendar();
+  if(id==='cfg') {
+    if(startDate) document.getElementById('start-date-inp').value = startDate;
+    document.getElementById('theme-lbl').textContent = theme==='dark'?'Modo escuro ativo':'Modo claro ativo';
+    loadReminderUI();
+  }
+}
+
+/* ════════ THEME ════════ */
+function toggleTheme() {
+  theme = theme==='dark'?'light':'dark';
+  applyTheme();
+  localStorage.setItem(SK.THEME, theme);
+  if(curPage==='cfg') document.getElementById('theme-lbl').textContent = theme==='dark'?'Modo escuro ativo':'Modo claro ativo';
+}
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', theme==='light'?'light':'dark');
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = theme==='dark'?'☀':'🌙';
+}
+
+/* ════════ SETTINGS ════════ */
+function saveStart() {
+  const val = document.getElementById('start-date-inp').value;
+  if(!val){ toast('⚠ Selecione uma data!'); return; }
+  startDate = val;
+  localStorage.setItem(SK.START, startDate);
+  toast('✓ Data de início salva!');
+  renderProgress();
+  renderPlan(true);
+}
+
+/* ════════ REMINDER ════════ */
+function loadReminderUI() {
+  if(reminderConfig.time) document.getElementById('reminder-time').value = reminderConfig.time;
+  const days = reminderConfig.days || [];
+  for(let i=0;i<7;i++){
+    const cb = document.getElementById(`rd${i}`);
+    if(cb) cb.checked = days.includes(i);
+  }
+  updateReminderStatus();
+}
+
+function updateReminderStatus() {
+  const el = document.getElementById('reminder-status');
+  if(!el) return;
+  if(reminderConfig.time && reminderConfig.days && reminderConfig.days.length) {
+    const dayNames = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const daysStr = reminderConfig.days.map(d=>dayNames[d]).join(', ');
+    el.textContent = `✓ Lembrete ativo: ${reminderConfig.time} em ${daysStr}`;
+    el.style.color = 'var(--green)';
+  } else {
+    el.textContent = '';
+  }
+}
+
+function saveReminder() {
+  const time = document.getElementById('reminder-time').value;
+  const days = [];
+  for(let i=0;i<7;i++){
+    const cb = document.getElementById(`rd${i}`);
+    if(cb && cb.checked) days.push(i);
+  }
+
+  if(!time) { toast('⚠ Selecione um horário!'); return; }
+  if(!days.length) { toast('⚠ Selecione ao menos um dia!'); return; }
+
+  if('Notification' in window) {
+    Notification.requestPermission().then(perm => {
+      if(perm === 'granted') {
+        reminderConfig = {time, days};
+        localStorage.setItem(SK.REMINDER, JSON.stringify(reminderConfig));
+        scheduleReminder();
+        toast('🔔 Lembrete salvo!');
+        updateReminderStatus();
+      } else {
+        toast('⚠ Permissão de notificação negada');
+      }
+    });
+  } else {
+    reminderConfig = {time, days};
+    localStorage.setItem(SK.REMINDER, JSON.stringify(reminderConfig));
+    toast('🔔 Lembrete salvo! (sem suporte a push neste browser)');
+    updateReminderStatus();
+  }
+}
+
+let _reminderTimeout = null;
+function scheduleReminder() {
+  if(_reminderTimeout) clearTimeout(_reminderTimeout);
+  if(!reminderConfig.time || !reminderConfig.days || !reminderConfig.days.length) return;
+
+  const [h, m] = reminderConfig.time.split(':').map(Number);
+  const now = new Date();
+  const candidate = new Date(now);
+  candidate.setHours(h, m, 0, 0);
+
+  // Find next valid day
+  for(let i = 0; i < 8; i++) {
+    const check = new Date(candidate);
+    check.setDate(candidate.getDate() + i);
+    if(check > now && reminderConfig.days.includes(check.getDay())) {
+      const ms = check - now;
+      _reminderTimeout = setTimeout(() => {
+        if(Notification.permission === 'granted') {
+          new Notification('📖 Palavra Viva', {
+            body: 'Hora da sua leitura diária — Palavra Viva',
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📖</text></svg>'
+          });
+        }
+        scheduleReminder(); // reschedule for next time
+      }, ms);
+      break;
+    }
+  }
+}
+
+/* ════════ BACKUP ════════ */
+function exportBackup() {
+  const data = { version:4, exportedAt:new Date().toISOString(), dailyChaps, dailyNotes, startDate };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url;
+  a.download = `palavra-viva-backup-${todayStr()}.json`;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  toast('✓ Backup exportado!');
+}
+
+document.getElementById('file-inp').addEventListener('change',function(e){
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const p=JSON.parse(ev.target.result);
+      if(p.dailyChaps) {
+        dailyChaps = p.dailyChaps||{};
+      } else if(p.dailyLog) {
+        dailyChaps = {};
+        if(p.startDate) {
+          Object.entries(p.dailyLog).forEach(([ds,count])=>{
+            const idx = daysBetween(p.startDate, ds);
+            if(idx>=0&&idx<365){
+              const dn = idx+1; const d=PLAN[idx];
+              if(d) dailyChaps[dn] = d.chaps.map((_,i)=>i<count);
+            }
+          });
+        }
+      }
+      dailyNotes = p.dailyNotes||p.notes||{};
+      if(p.startDate && Object.keys(dailyNotes).some(k=>k.includes('-'))) {
+        const migrated={};
+        Object.entries(dailyNotes).forEach(([k,v])=>{
+          if(k.includes('-')){
+            const idx=daysBetween(p.startDate,k);
+            if(idx>=0&&idx<365) migrated[idx+1]=v;
+          } else migrated[k]=v;
+        });
+        dailyNotes=migrated;
+      }
+      startDate=p.startDate||null;
+      saveState();
+      if(startDate) localStorage.setItem(SK.START,startDate);
+      toast('✓ Backup importado! Recarregando…');
+      setTimeout(()=>location.reload(),800);
+    } catch { toast('✕ Arquivo inválido.'); }
+  };
+  r.readAsText(file); this.value='';
+});
+
+function doReset() {
+  dailyChaps={}; dailyNotes={};
+  saveState(); localStorage.removeItem(SK.START);
+  closeModal('reset-modal');
+  toast('Dados apagados. Recarregando…');
+  setTimeout(()=>location.reload(),700);
+}
+
+/* ════════ MODAL & TOAST ════════ */
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+let _tt;
+function toast(msg, celebration) {
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.classList.toggle('celebration', !!celebration);
+  el.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('show'),celebration?3200:2600);
+}
+
+/* ════════ PWA ════════ */
+let _deferredInstall = null;
+
+// Inline manifest via blob
+(function() {
+  const manifest = {
+    name: 'Palavra Viva',
+    short_name: 'PalavraViva',
+    description: 'Plano de leitura bíblica 365 dias',
+    start_url: './',
+    display: 'standalone',
+    background_color: '#0c0c14',
+    theme_color: '#0c0c14',
+    icons: [{src:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230c0c14"/><text y=".9em" font-size="70" x="15">📖</text></svg>',sizes:'192x192',type:'image/svg+xml'}]
+  };
+  const blob = new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  const url = URL.createObjectURL(blob);
+  document.getElementById('manifest-link').href = url;
+})();
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredInstall = e;
+  const item = document.getElementById('install-item');
+  if(item) item.style.display = 'flex';
+});
+
+function triggerInstall() {
+  if(_deferredInstall) {
+    _deferredInstall.prompt();
+    _deferredInstall.userChoice.then(() => { _deferredInstall = null; });
+  }
+}
+
+// Service worker registration
+if('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'pviva-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+    });
+  `;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  const url = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(url).catch(()=>{});
+}
+
+/* ════════ INIT ════════ */
+loadState();
+applyTheme();
+renderProgress();
+renderStreak();
+renderPlan(true);
+scheduleReminder();
+</script>
+</body>
+</html>
