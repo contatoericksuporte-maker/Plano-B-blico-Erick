@@ -315,7 +315,8 @@ textarea,input{font-family:inherit;outline:none}
   animation:slideUp .28s var(--spring);max-height:92dvh;overflow-y:auto;
 }
 @keyframes slideUp{from{transform:translateY(80px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-handle{width:36px;height:4px;background:var(--bdr2);border-radius:2px;margin:0 auto 14px}
+.modal-handle{width:36px;height:4px;background:var(--bdr2);border-radius:2px;margin:0 auto 0;cursor:grab}
+.modal-handle-area{width:calc(100% + 40px);margin:-10px -20px 8px;padding:12px 0;display:flex;justify-content:center;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
 .modal-title{font-family:var(--fdisp);font-size:1.15rem;font-weight:700;margin-bottom:6px}
 .modal-sub{font-size:.82rem;color:var(--tx2);line-height:1.6;margin-bottom:14px}
 .btn-row{display:flex;gap:8px;margin-top:4px}
@@ -648,8 +649,10 @@ textarea,input{font-family:inherit;outline:none}
 
 <!-- Day modal -->
 <div class="modal-ov" id="day-modal" onclick="if(event.target===this)closeModal('day-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
+  <div class="modal-sheet" id="day-modal-sheet">
+    <div class="modal-handle-area" id="day-modal-handle">
+      <div class="modal-handle"></div>
+    </div>
     <div style="font-size:.63rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:3px" id="dm-phase">—</div>
     <div class="modal-title" id="dm-title">Dia —</div>
     <div style="font-size:.83rem;color:var(--tx2);margin-bottom:2px" id="dm-ref">—</div>
@@ -1767,32 +1770,53 @@ function saveReminder() {
   }
 }
 
-let _reminderTimeout = null;
+let _reminderInterval = null;
+let _lastNotifiedKey = null;
+
 function scheduleReminder() {
-  if(_reminderTimeout) clearTimeout(_reminderTimeout);
+  // Cancela intervalo anterior
+  if(_reminderInterval) clearInterval(_reminderInterval);
   if(!reminderConfig.time || !reminderConfig.days || !reminderConfig.days.length) return;
 
-  const [h, m] = reminderConfig.time.split(':').map(Number);
-  const now = new Date();
-  const candidate = new Date(now);
-  candidate.setHours(h, m, 0, 0);
+  // Verifica a cada 30 segundos se está na hora certa
+  _reminderInterval = setInterval(() => {
+    checkAndFireReminder();
+  }, 30000);
 
-  // Find next valid day
-  for(let i = 0; i < 8; i++) {
-    const check = new Date(candidate);
-    check.setDate(candidate.getDate() + i);
-    if(check > now && reminderConfig.days.includes(check.getDay())) {
-      const ms = check - now;
-      _reminderTimeout = setTimeout(() => {
-        if(Notification.permission === 'granted') {
-          new Notification('📖 Palavra Viva', {
-            body: 'Hora da sua leitura diária — Palavra Viva',
-            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📖</text></svg>'
-          });
-        }
-        scheduleReminder(); // reschedule for next time
-      }, ms);
-      break;
+  // Também verifica imediatamente
+  checkAndFireReminder();
+}
+
+function checkAndFireReminder() {
+  if(!reminderConfig.time || !reminderConfig.days || !reminderConfig.days.length) return;
+  if(Notification.permission !== 'granted') return;
+
+  const now = new Date();
+  const [h, m] = reminderConfig.time.split(':').map(Number);
+  const currentH = now.getHours();
+  const currentM = now.getMinutes();
+  const currentDay = now.getDay();
+
+  // Chave única para evitar disparar duas vezes no mesmo minuto
+  const notifyKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${h}-${m}`;
+
+  if(
+    currentH === h &&
+    currentM === m &&
+    reminderConfig.days.includes(currentDay) &&
+    _lastNotifiedKey !== notifyKey
+  ) {
+    _lastNotifiedKey = notifyKey;
+    try {
+      new Notification('📖 Palavra Viva', {
+        body: 'Hora da sua leitura diária! Abra o app e continue seu plano.',
+        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230c0c14"/><text y=".85em" font-size="70" x="15">📖</text></svg>',
+        badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📖</text></svg>',
+        tag: 'palavra-viva-reminder',
+        requireInteraction: false
+      });
+    } catch(e) {
+      console.warn('Notification error:', e);
     }
   }
 }
@@ -1921,7 +1945,57 @@ if('serviceWorker' in navigator) {
   navigator.serviceWorker.register(url).catch(()=>{});
 }
 
-/* ════════ INIT ════════ */
+/* ════════ SWIPE TO CLOSE MODAL ════════ */
+(function() {
+  const handle = document.getElementById('day-modal-handle');
+  const sheet = document.getElementById('day-modal-sheet');
+  const overlay = document.getElementById('day-modal');
+  if(!handle || !sheet || !overlay) return;
+
+  let startY = 0, currentY = 0, dragging = false;
+
+  function onStart(e) {
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    currentY = startY;
+    dragging = true;
+    sheet.style.transition = 'none';
+  }
+
+  function onMove(e) {
+    if(!dragging) return;
+    currentY = e.touches ? e.touches[0].clientY : e.clientY;
+    const dy = Math.max(0, currentY - startY);
+    sheet.style.transform = `translateY(${dy}px)`;
+    if(e.cancelable) e.preventDefault();
+  }
+
+  function onEnd() {
+    if(!dragging) return;
+    dragging = false;
+    const dy = currentY - startY;
+    sheet.style.transition = '';
+    sheet.style.transform = '';
+    if(dy > 80) {
+      closeModal('day-modal');
+    }
+  }
+
+  handle.addEventListener('touchstart', onStart, {passive: true});
+  handle.addEventListener('touchmove', onMove, {passive: false});
+  handle.addEventListener('touchend', onEnd);
+  handle.addEventListener('mousedown', onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onEnd);
+})();
+
+/* ════════ VISIBILITY API — recheck reminder on tab focus ════════ */
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible') {
+    checkAndFireReminder();
+  }
+});
+
+
 loadState();
 applyTheme();
 renderProgress();
