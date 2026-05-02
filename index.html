@@ -13,8 +13,47 @@
 <title>Palavra Viva · 365 Dias</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-/* ── TOKENS ── */
+/* ── AUTH SCREEN ── */
+#auth-screen{
+  position:fixed;inset:0;z-index:999;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  animation:fadeIn .3s var(--ease);
+}
+#auth-screen.hidden{display:none}
+.auth-card{
+  width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--bdr2);
+  border-radius:var(--r);padding:32px 24px;
+}
+.auth-logo{text-align:center;margin-bottom:20px}
+.auth-logo-icon{font-size:3rem;display:block;margin-bottom:6px}
+.auth-logo-title{font-family:var(--fdisp);font-size:1.5rem;font-weight:700;color:var(--tx)}
+.auth-logo-sub{font-size:.72rem;color:var(--tx3);margin-top:2px;letter-spacing:.05em;text-transform:uppercase}
+.auth-tabs{display:flex;gap:4px;background:var(--bg3);border-radius:var(--r3);padding:3px;margin-bottom:20px}
+.auth-tab{flex:1;padding:7px;border-radius:6px;font-size:.8rem;font-weight:700;color:var(--tx3);text-align:center;transition:all .2s}
+.auth-tab.active{background:var(--bg);color:var(--tx);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.auth-field{margin-bottom:12px}
+.auth-field label{display:block;font-size:.68rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.auth-field input{width:100%;background:var(--bg3);border:1px solid var(--bdr2);border-radius:var(--r3);color:var(--tx);padding:10px 12px;font-size:.9rem;transition:border .2s}
+.auth-field input:focus{border-color:var(--gold)}
+.auth-err{font-size:.75rem;color:var(--red);text-align:center;margin-bottom:10px;min-height:18px}
+.auth-btn{width:100%;background:var(--goldG);color:#0c0c14;border-radius:var(--r3);padding:12px;font-size:.9rem;font-weight:800;letter-spacing:.03em;transition:opacity .2s;margin-top:4px}
+.auth-btn:active{opacity:.8}
+.auth-btn:disabled{opacity:.5}
+.auth-divider{text-align:center;font-size:.7rem;color:var(--tx3);margin:14px 0}
+/* Sync badge */
+.sync-badge{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--tx3);padding:6px 10px;background:var(--bg3);border-radius:var(--r3);border:1px solid var(--bdr)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite}
+/* User card in settings */
+.user-card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg3);border-radius:var(--r2);border:1px solid var(--bdr);margin-bottom:4px}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:var(--goldG);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#0c0c14;flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.user-email{font-size:.82rem;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-status{font-size:.67rem;color:var(--green);margin-top:1px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
 :root {
   --bg:     #0c0c14;
   --bg2:    #121220;
@@ -469,6 +508,7 @@ textarea,input{font-family:inherit;outline:none}
       <div class="streak-badge" id="streak-badge">
         <span>🔥</span><span class="streak-num" id="streak-num">0</span>
       </div>
+      <div class="sync-badge" id="topbar-sync" style="display:none"><div class="sync-dot" id="sync-dot"></div><span id="sync-lbl">☁</span></div>
       <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Tema">☀</button>
       <button class="icon-btn" onclick="openModal('backup-modal')" title="Backup">⬇</button>
     </div>
@@ -557,6 +597,30 @@ textarea,input{font-family:inherit;outline:none}
   <div class="sec-hdr"><div><div class="sec-title">Configurações</div></div></div>
 
   <div class="stg-sec">Progresso</div>
+  <div class="stg-sec">Conta</div>
+  <div class="stg-list">
+    <div id="user-card-wrap">
+      <div class="user-card">
+        <div class="user-avatar" id="user-avatar">?</div>
+        <div class="user-info">
+          <div class="user-email" id="user-email-lbl">Carregando…</div>
+          <div class="user-status">✓ Dados sincronizados na nuvem</div>
+        </div>
+      </div>
+    </div>
+    <div class="stg-item" onclick="syncNow()" id="sync-btn-item">
+      <div class="stg-iico" style="background:var(--blueL)">☁</div>
+      <div class="stg-itxt"><div class="stg-ilbl">Sincronizar agora</div><div class="stg-isub" id="sync-status-lbl">Última sync: —</div></div>
+      <div class="stg-arr">›</div>
+    </div>
+    <div class="stg-item" onclick="doLogout()">
+      <div class="stg-iico" style="background:var(--redL)">🚪</div>
+      <div class="stg-itxt"><div class="stg-ilbl">Sair da conta</div><div class="stg-isub">Dados permanecem na nuvem</div></div>
+      <div class="stg-arr">›</div>
+    </div>
+  </div>
+
+  <div class="stg-sec">Plano</div>
   <div class="stg-list">
     <div class="stg-item no-click" style="flex-direction:column;align-items:flex-start">
       <div style="font-size:.7rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em">Data de Início do Plano</div>
@@ -630,6 +694,36 @@ textarea,input{font-family:inherit;outline:none}
   </div>
   <input type="file" id="file-inp" accept=".json" style="display:none">
   <div style="height:20px"></div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="auth-logo-icon">📖</span>
+      <div class="auth-logo-title">Palavra Viva</div>
+      <div class="auth-logo-sub">Plano Bíblico · 365 Dias</div>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="authTab('login')">Entrar</div>
+      <div class="auth-tab" id="tab-signup" onclick="authTab('signup')">Criar conta</div>
+    </div>
+    <div class="auth-err" id="auth-err"></div>
+    <div class="auth-field">
+      <label>E-mail</label>
+      <input type="email" id="auth-email" placeholder="seu@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label>Senha</label>
+      <input type="password" id="auth-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAuth()">
+    </div>
+    <div class="auth-field" id="auth-pass2-wrap" style="display:none">
+      <label>Confirmar senha</label>
+      <input type="password" id="auth-pass2" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')doAuth()">
+    </div>
+    <button class="auth-btn" id="auth-btn" onclick="doAuth()">Entrar →</button>
+    <div class="auth-divider">Seus dados ficam salvos na nuvem com segurança ☁</div>
+  </div>
 </div>
 
 <!-- BOTTOM NAV -->
@@ -1213,11 +1307,6 @@ function loadState() {
   theme = localStorage.getItem(SK.THEME)||'dark';
 }
 
-function saveState() {
-  localStorage.setItem(SK.CHAPS, JSON.stringify(dailyChaps));
-  localStorage.setItem(SK.NOTES, JSON.stringify(dailyNotes));
-}
-
 /* ════════ DATE HELPERS ════════ */
 function todayStr() {
   const d=new Date(); return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;
@@ -1758,15 +1847,7 @@ function applyTheme() {
 }
 
 /* ════════ SETTINGS ════════ */
-function saveStart() {
-  const val = document.getElementById('start-date-inp').value;
-  if(!val){ toast('⚠ Selecione uma data!'); return; }
-  startDate = val;
-  localStorage.setItem(SK.START, startDate);
-  toast('✓ Data de início salva!');
-  renderProgress();
-  renderPlan(true);
-}
+/* saveStart is defined below with cloud sync */
 
 /* ════════ REMINDER ════════ */
 function loadReminderUI() {
@@ -2067,12 +2148,234 @@ document.addEventListener('visibilitychange', () => {
 });
 
 
-loadState();
-applyTheme();
-renderProgress();
-renderStreak();
-renderPlan(true);
-scheduleReminder();
+const SUPA_URL = 'https://aapbwnmnquqrdrdjdppr.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhcGJ3bm1ucXVxcmRyZGpkcHByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2OTAzNzIsImV4cCI6MjA5MzI2NjM3Mn0.zs3FoFidyR7uS5yDbIcFF8XVTHq9Zd7FrICjWIYQWo4';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let currentUser = null;
+let _lastSyncTime = null;
+
+/* ── Auth tab switcher ── */
+function authTab(mode) {
+  const isSignup = mode === 'signup';
+  document.getElementById('tab-login').classList.toggle('active', !isSignup);
+  document.getElementById('tab-signup').classList.toggle('active', isSignup);
+  document.getElementById('auth-pass2-wrap').style.display = isSignup ? '' : 'none';
+  document.getElementById('auth-btn').textContent = isSignup ? 'Criar conta →' : 'Entrar →';
+  document.getElementById('auth-err').textContent = '';
+}
+
+/* ── Execute login or signup ── */
+async function doAuth() {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass  = document.getElementById('auth-pass').value;
+  const btn   = document.getElementById('auth-btn');
+  const errEl = document.getElementById('auth-err');
+  const isSignup = document.getElementById('tab-signup').classList.contains('active');
+
+  if(!email || !pass) { errEl.textContent = '⚠ Preencha e-mail e senha.'; return; }
+  if(isSignup) {
+    const pass2 = document.getElementById('auth-pass2').value;
+    if(pass !== pass2) { errEl.textContent = '⚠ As senhas não coincidem.'; return; }
+    if(pass.length < 6) { errEl.textContent = '⚠ Senha precisa ter mínimo 6 caracteres.'; return; }
+  }
+
+  btn.disabled = true;
+  btn.textContent = '…';
+  errEl.textContent = '';
+
+  try {
+    let result;
+    if(isSignup) {
+      result = await sb.auth.signUp({ email, password: pass });
+    } else {
+      result = await sb.auth.signInWithPassword({ email, password: pass });
+    }
+    const { data, error } = result;
+    if(error) { errEl.textContent = '✕ ' + translateAuthError(error.message); return; }
+    if(isSignup && !data.session) {
+      errEl.textContent = '';
+      document.getElementById('auth-btn').textContent = '✓ Verifique seu e-mail para confirmar a conta!';
+      return;
+    }
+    currentUser = data.user || data.session?.user;
+    await onLoggedIn();
+  } catch(e) {
+    errEl.textContent = '✕ Erro: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    if(!isSignup) btn.textContent = 'Entrar →';
+  }
+}
+
+function translateAuthError(msg) {
+  if(msg.includes('Invalid login')) return 'E-mail ou senha incorretos.';
+  if(msg.includes('Email not confirmed')) return 'Confirme seu e-mail antes de entrar.';
+  if(msg.includes('User already registered')) return 'E-mail já cadastrado. Faça login.';
+  if(msg.includes('Password should be')) return 'Senha muito curta (mínimo 6 caracteres).';
+  return msg;
+}
+
+/* ── After successful login ── */
+async function onLoggedIn() {
+  // Load local first (instant), then cloud
+  loadState();
+  applyTheme();
+  renderProgress();
+  renderStreak();
+  renderPlan(true);
+  scheduleReminder();
+  showApp();
+  await loadFromCloud(); // overlay cloud data on top
+}
+
+function showApp() {
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('topbar-sync').style.display = 'flex';
+  updateUserUI();
+}
+
+function updateUserUI() {
+  if(!currentUser) return;
+  const email = currentUser.email || '';
+  const initial = email.charAt(0).toUpperCase();
+  document.getElementById('user-avatar').textContent = initial;
+  document.getElementById('user-email-lbl').textContent = email;
+}
+
+/* ── Load user data from Supabase ── */
+async function loadFromCloud() {
+  if(!currentUser) return;
+  setSyncState('syncing');
+  try {
+    const { data, error } = await sb
+      .from('user_progress')
+      .select('daily_chaps, daily_notes, start_date, updated_at')
+      .eq('user_id', currentUser.id)
+      .single();
+
+    if(error && error.code !== 'PGRST116') throw error; // PGRST116 = row not found (first login)
+    if(data) {
+      dailyChaps = data.daily_chaps || {};
+      dailyNotes = data.daily_notes || {};
+      if(data.start_date) startDate = data.start_date;
+      // Save to local as cache
+      localStorage.setItem(SK.CHAPS, JSON.stringify(dailyChaps));
+      localStorage.setItem(SK.NOTES, JSON.stringify(dailyNotes));
+      if(startDate) localStorage.setItem(SK.START, startDate);
+      _lastSyncTime = data.updated_at || new Date().toISOString();
+      renderProgress();
+      renderStreak();
+      renderPlan(true);
+    }
+    setSyncState('ok');
+  } catch(e) {
+    console.warn('Cloud load error:', e);
+    setSyncState('error');
+  }
+}
+
+/* ── Save user data to Supabase ── */
+async function saveToCloud() {
+  if(!currentUser) return;
+  setSyncState('syncing');
+  try {
+    const { error } = await sb
+      .from('user_progress')
+      .upsert({
+        user_id: currentUser.id,
+        daily_chaps: dailyChaps,
+        daily_notes: dailyNotes,
+        start_date: startDate
+      }, { onConflict: 'user_id' });
+    if(error) throw error;
+    _lastSyncTime = new Date().toISOString();
+    setSyncState('ok');
+  } catch(e) {
+    console.warn('Cloud save error:', e);
+    setSyncState('error');
+  }
+}
+
+function setSyncState(state) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-lbl');
+  if(!dot) return;
+  if(state === 'syncing') {
+    dot.className = 'sync-dot syncing';
+    if(lbl) lbl.textContent = '☁';
+  } else if(state === 'ok') {
+    dot.className = 'sync-dot';
+    if(lbl) lbl.textContent = '☁';
+    updateSyncLabel();
+  } else {
+    dot.style.background = 'var(--red)';
+    if(lbl) lbl.textContent = '☁';
+  }
+}
+
+function updateSyncLabel() {
+  const el = document.getElementById('sync-status-lbl');
+  if(!el || !_lastSyncTime) return;
+  const d = new Date(_lastSyncTime);
+  el.textContent = 'Última sync: ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+
+/* ── Manual sync ── */
+async function syncNow() {
+  await saveToCloud();
+  await loadFromCloud();
+  toast('☁ Dados sincronizados!');
+}
+
+/* ── Logout ── */
+async function doLogout() {
+  await sb.auth.signOut();
+  currentUser = null;
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('topbar-sync').style.display = 'none';
+}
+
+/* ── Init: check existing session ── */
+async function initSupabase() {
+  const { data: { session } } = await sb.auth.getSession();
+  if(session && session.user) {
+    currentUser = session.user;
+    await onLoggedIn();
+  }
+  // If no session, auth screen is already visible
+  // Listen for auth changes
+  sb.auth.onAuthStateChange((_event, session) => {
+    if(_event === 'SIGNED_OUT') {
+      currentUser = null;
+    }
+  });
+}
+
+/* ════════ SAVE STATE PATCH (cloud sync) ════════ */
+function saveState() {
+  localStorage.setItem(SK.CHAPS, JSON.stringify(dailyChaps));
+  localStorage.setItem(SK.NOTES, JSON.stringify(dailyNotes));
+  clearTimeout(saveState._t);
+  saveState._t = setTimeout(() => saveToCloud(), 1500);
+}
+
+function saveStart() {
+  const val = document.getElementById('start-date-inp').value;
+  if(!val){ toast('⚠ Selecione uma data!'); return; }
+  startDate = val;
+  localStorage.setItem(SK.START, startDate);
+  toast('✓ Data de início salva!');
+  renderProgress();
+  renderPlan(true);
+  clearTimeout(saveStart._t);
+  saveStart._t = setTimeout(() => saveToCloud(), 1500);
+}
+
+/* ════════ BOOT ════════ */
+initSupabase();
+
+
 </script>
 </body>
 </html>
